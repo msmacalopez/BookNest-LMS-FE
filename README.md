@@ -3,4 +3,5 @@ NIT3004
 Sanjil and Macarena
 2026
 
-main main
+this is a new change in readme
+dev devefsdfsdfsdfdsfsdf
