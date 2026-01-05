@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function BookCard() {
   return (
@@ -21,8 +22,9 @@ export default function BookCard() {
             are title and actions parts
           </p>
           <div className="card-actions justify-end">
-            <div className="badge badge-outline">Fashion</div>
-            <div className="badge badge-outline">Products</div>
+            <Link to="/booksdetails" className="badge badge-outline">
+              More...
+            </Link>
           </div>
         </div>
       </div>

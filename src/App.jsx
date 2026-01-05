@@ -22,22 +22,26 @@ import ProfilePage from "./pages/private/ProfilePage.jsx";
 import BookManagementPage from "./pages/private/BookManagementPage.jsx";
 import BorrowManagementPage from "./pages/private/BorrowManagementPage.jsx";
 import ReviewManagementPage from "./pages/private/ReviewManagementPage.jsx";
+import AllBooksPage from "./pages/public/AllBooksPage.jsx";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <>
-      <LibNavBar />
-      <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/books/:id" element={<BookDetailPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
+      <div className="min-h-screen flex flex-col">
+        <LibNavBar />
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/books/:id" element={<BookDetailPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/allbooks" element={<AllBooksPage />} />
+            <Route path="/booksdetails" element={<BookDetailPage />} />
 
-          {/* private routes */}
-          {/* <Route
+            {/* private routes */}
+            {/* <Route
             path="/dashboard"
             element={<DashboardLayout userRole={userRole} />}
           >
@@ -48,18 +52,19 @@ function App() {
             <Route path="borrows" element={<BorrowManagementPage />} />
             <Route path="reviews" element={<ReviewManagementPage />} />
           </Route> */}
-          <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route index element={<DashboardHome />} />
-            <Route path="borrowed" element={<BorrowedBooksPage />} />
-            <Route path="profile" element={<ProfilePage />} />
-            <Route path="books" element={<BookManagementPage />} />
-            <Route path="borrows" element={<BorrowManagementPage />} />
-            <Route path="reviews" element={<ReviewManagementPage />} />
-          </Route>
-        </Routes>
+            <Route path="/dashboard" element={<DashboardLayout />}>
+              <Route index element={<DashboardHome />} />
+              <Route path="borrowed" element={<BorrowedBooksPage />} />
+              <Route path="profile" element={<ProfilePage />} />
+              <Route path="books" element={<BookManagementPage />} />
+              <Route path="borrows" element={<BorrowManagementPage />} />
+              <Route path="reviews" element={<ReviewManagementPage />} />
+            </Route>
+          </Routes>
+        </main>
+        <Footer />
+        <ToastContainer />
       </div>
-      <Footer />
-      <ToastContainer />
     </>
   );
 }

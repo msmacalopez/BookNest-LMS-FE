@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Hero() {
   return (
@@ -21,10 +22,13 @@ export default function Hero() {
               and management.
             </p>
             <div>
-              <button className="btn btn-primary me-2">Get Started</button>
-              <button className="btn btn-outline-primary ms-2">
+              <Link to="/signup" className="btn btn-primary me-2">
+                Get Started
+              </Link>
+
+              <Link to="/allbooks" className="btn btn-outline-primary ms-2">
                 Browse Books
-              </button>
+              </Link>
             </div>
           </div>
         </div>

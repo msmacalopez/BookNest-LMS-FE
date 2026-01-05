@@ -22,7 +22,7 @@ const LibNavBar = () => {
     <>
       <div className="navbar bg-base-100 shadow-md max-h-16 md:px-20">
         <div className="navbar-start">
-          {/* collapsive menu */}
+          {/* collapsive menu - Mobile Menu */}
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
               <svg
@@ -32,7 +32,6 @@ const LibNavBar = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                {" "}
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -41,47 +40,53 @@ const LibNavBar = () => {
                 />{" "}
               </svg>
             </div>
+            {/* List Collapsive */}
             <ul
               tabIndex="-1"
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
             >
               <li>
-                <a>Books</a>
+                <Link to="/allbooks">Books</Link>
               </li>
               <li>
-                <a>Link</a>
+                <Link to="/login" className="btn btn-primary text-white">
+                  Log In
+                </Link>
               </li>
               <li>
-                <button className="btn btn-primary text-white">Log In</button>
-              </li>
-              <li>
-                <button className="btn btn-outline btn-primary text-dark">
+                <Link
+                  to="/signup"
+                  className="btn btn-outline btn-primary text-dark"
+                >
                   Create Account
-                </button>
+                </Link>
               </li>
             </ul>
           </div>
-          <a className="btn btn-ghost text-4xl font-bold">
+          {/* Logo BOOKNEST */}
+          <Link to="/" className="btn btn-ghost text-4xl font-bold">
             <PiBookOpenBold className="text-blue-600 text-4xl" />
             BookNest
-          </a>
+          </Link>
         </div>
-        {/* Non Collapsive _> visible when large */}
+        {/* Non Collapsive -> visible when large */}
         <div className="navbar-end hidden lg:flex">
           <ul className="menu menu-horizontal px-1 text-xl gap-2">
             <li>
-              <a>Books</a>
+              <Link to="/allbooks">Books</Link>
             </li>
             <li>
-              <a>Link</a>
+              <Link to="/login" className="btn btn-primary text-white">
+                Log In
+              </Link>
             </li>
             <li>
-              <button className="btn btn-primary text-white">Log In</button>
-            </li>
-            <li>
-              <button className="btn btn-outline btn-primary text-dark">
+              <Link
+                to="/signup"
+                className="btn btn-outline btn-primary text-dark"
+              >
                 Create Account
-              </button>
+              </Link>
             </li>
           </ul>
         </div>

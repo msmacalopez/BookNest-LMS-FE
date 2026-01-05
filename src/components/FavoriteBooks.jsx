@@ -5,7 +5,11 @@ export default function FavoriteBooks() {
   return (
     <div className="flex flex-col items-center justify-center my-10">
       {/* Search Input */}
-      <label className="input rounded-full md:w-200">
+      <label
+        className="input rounded-full md:w-200 focus-within:border-gray-100
+    focus-within:ring-0
+    focus-within:shadow-none"
+      >
         <svg
           className="h-[1em] opacity-50"
           xmlns="http://www.w3.org/2000/svg"
@@ -25,7 +29,7 @@ export default function FavoriteBooks() {
         <input
           type="search"
           required
-          placeholder="Search for your favorites books e.g. Quijote"
+          placeholder="Search for your favorites books (e.g. Quijote, Sherlock Holmes...)"
         />
       </label>
       {/* List of Top */}
