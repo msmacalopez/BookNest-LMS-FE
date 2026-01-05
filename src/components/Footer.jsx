@@ -13,7 +13,7 @@ export default function Footer() {
         minHeight: "10vh",
       }}
     >
-      {new Date().getFullYear()} MyLibrary. &copy; All rights reserved.
+      {new Date().getFullYear()} BookNest. &copy; All rights reserved.
     </footer>
   );
 }

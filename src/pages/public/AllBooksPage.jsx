@@ -1,6 +1,5 @@
 import React from "react";
-import LibNavBar from "../../components/LibNavBar";
 
 export default function AllBooksPage() {
-  return <div>all books</div>;
+  return <div>All Books Page... Shows all public books</div>;
 }
