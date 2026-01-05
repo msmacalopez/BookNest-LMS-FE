@@ -11,7 +11,7 @@ import LibNavBar from "./components/LibNavBar.jsx";
 import Footer from "./components/Footer.jsx";
 
 //imported pages/;
-import HomePage from "./pages/public/HomePage.jsx";
+import HomePage from "./pages/public/AllBooksPage.jsx";
 import BookDetailPage from "./pages/public/BookDetailPage.jsx";
 import LoginPage from "./pages/public/LoginPage.jsx";
 import SignupPage from "./pages/public/SignupPage.jsx";
