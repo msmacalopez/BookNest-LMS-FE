@@ -23,6 +23,7 @@ import BookManagementPage from "./pages/private/BookManagementPage.jsx";
 import BorrowManagementPage from "./pages/private/BorrowManagementPage.jsx";
 import ReviewManagementPage from "./pages/private/ReviewManagementPage.jsx";
 import AllBooksPage from "./pages/public/AllBooksPage.jsx";
+import ManageAdmins from "./pages/system-private/ManageAdmins.jsx";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -53,12 +54,16 @@ function App() {
             <Route path="reviews" element={<ReviewManagementPage />} />
           </Route> */}
             <Route path="/dashboard" element={<DashboardLayout />}>
+              {/* Logged In Members */}
               <Route index element={<DashboardHome />} />
               <Route path="borrowed" element={<BorrowedBooksPage />} />
               <Route path="profile" element={<ProfilePage />} />
               <Route path="books" element={<BookManagementPage />} />
+              {/* Admins */}
               <Route path="borrows" element={<BorrowManagementPage />} />
               <Route path="reviews" element={<ReviewManagementPage />} />
+              {/* Super Admins */}
+              <Route path="admins" element={<ManageAdmins />} />
             </Route>
           </Routes>
         </main>
