@@ -11,7 +11,7 @@ export default function DashboardLayout() {
       </aside>
 
       {/* Main content */}
-      <main className="p-4 md:p-6 border border-3 border-blue-500">
+      <main className="p-4 md:p-6">
         <Outlet />
       </main>
     </div>

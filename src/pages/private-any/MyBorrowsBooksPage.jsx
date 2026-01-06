@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function BorrowManagementPage() {
+export default function MyBorrowsBooksPage() {
   return (
     <div>
       <h1 className="text-primary text-2xl font-bold mb-3">My Borrows</h1>

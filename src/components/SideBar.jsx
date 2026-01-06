@@ -12,7 +12,7 @@ export default function SideBar() {
       {/* MEMBERS */}
       <div className="flex flex-col gap-3">
         <p className="font-bold text-xl"> Menu</p>
-        <Link to="/dashboard/borrows">My Borrows</Link>
+        <Link to="/dashboard/myborrows">My Borrows</Link>
         <Link to="/dashboard/profile">Profile</Link>
       </div>
       <hr />

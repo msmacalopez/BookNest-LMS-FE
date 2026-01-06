@@ -11,19 +11,23 @@ import LibNavBar from "./components/LibNavBar.jsx";
 import Footer from "./components/Footer.jsx";
 
 //imported pages/;
+import DashboardLayout from "./layouts/DashboardLayout.jsx";
+// public pages:
 import HomePage from "./pages/public/HomePage.jsx";
+import AllBooksPage from "./pages/public/AllBooksPage.jsx";
 import BookDetailPage from "./pages/public/BookDetailPage.jsx";
 import LoginPage from "./pages/public/LoginPage.jsx";
 import SignupPage from "./pages/public/SignupPage.jsx";
-import DashboardLayout from "./layouts/DashboardLayout.jsx";
-import DashboardHome from "./pages/private/DashboardHome.jsx";
-import BorrowedBooksPage from "./pages/private/BorrowedBooksPage.jsx";
-import ProfilePage from "./pages/private/ProfilePage.jsx";
-import BookManagementPage from "./pages/private/BookManagementPage.jsx";
-import BorrowManagementPage from "./pages/private/BorrowManagementPage.jsx";
-import ReviewManagementPage from "./pages/private/ReviewManagementPage.jsx";
-import AllBooksPage from "./pages/public/AllBooksPage.jsx";
-import ManageAdmins from "./pages/system-private/ManageAdmins.jsx";
+// private pages:
+import DashboardHome from "./pages/private-any/DashboardHome.jsx";
+import MyBorrowsBooksPage from "./pages/private-any/MyBorrowsBooksPage.jsx";
+import ProfilePage from "./pages/private-any/ProfilePage.jsx";
+// admin pages:
+import BookManagementPage from "./pages/private-admin/BookManagementPage.jsx";
+import BorrowManagementPage from "./pages/private-admin/BorrowManagementPage.jsx";
+import ReviewManagementPage from "./pages/private-admin/ReviewManagementPage.jsx";
+
+import ManageAdmins from "./pages/private-system/ManageAdmins.jsx";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -56,7 +60,7 @@ function App() {
             <Route path="/dashboard" element={<DashboardLayout />}>
               {/* Logged In Members */}
               <Route index element={<DashboardHome />} />
-              <Route path="borrowed" element={<BorrowedBooksPage />} />
+              <Route path="myborrows" element={<MyBorrowsBooksPage />} />
               <Route path="profile" element={<ProfilePage />} />
               <Route path="books" element={<BookManagementPage />} />
               {/* Admins */}
