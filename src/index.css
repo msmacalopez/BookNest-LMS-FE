@@ -7,7 +7,7 @@
 }
 
 /* To Customize dark: */
-@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* @layer components {
   html[data-theme="dark"] .card {
