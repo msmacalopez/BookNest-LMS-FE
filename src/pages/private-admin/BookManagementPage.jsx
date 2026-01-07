@@ -5,7 +5,9 @@ export default function BookManagementPage() {
   return (
     <div>
       <div className="flex flex-col gap-2 md:flex-row md:gap-8 items-center">
-        <h1 className="text-primary text-2xl font-bold mb-3">Manage Books</h1>
+        <h1 className="text-primary text-2xl font-bold mb-3">
+          Books Management
+        </h1>
         {/* BTN ADD */}
         <Link to="/dashboard/editbook/:id" className="btn btn-success max-h-8">
           Add New Book
@@ -74,60 +76,7 @@ export default function BookManagementPage() {
                   <input type="checkbox" className="checkbox w-4 h-4" />
                 </label>
               </th>
-              <td>
-                <Link
-                  to="/dashboard/editbook/:id"
-                  className="btn btn-warning max-h-6 w-20 mb-2"
-                >
-                  Edit
-                </Link>
-                <button className="btn btn-error max-h-6 w-20 mt-2">
-                  Delete
-                </button>
-              </td>
-              <td>
-                <div className="flex items-center gap-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle h-12 w-12">
-                      <img
-                        src="https://img.daisyui.com/images/profile/demo/2@94.webp"
-                        alt="Avatar Tailwind CSS Component"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="font-bold">Title</div>
-                    <div className="text-sm opacity-50">Language</div>
-                  </div>
-                </div>
-              </td>
-              <td>Zemlak, Daniel and Leannon</td>
-              <td>1990</td>
-              <td>1111111111111</td>
-              <td>
-                {"Lorem ipsum dolor sit, amet consectetur adipisicing elit Repellendus et".slice(
-                  0,
-                  30
-                )}
-              </td>
-              <td>Fiction</td>
-              <td>Paperback</td>
-              <td>English</td>
-              <td>UK</td>
-              <td>Patagonia Editions</td>
-              <td>140p</td>
-              <td>100</td>
-              <td>20</td>
-              <td>80</td>
-            </tr>
-            {/* row 2 */}
-            <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox w-4 h-4" />
-                </label>
-              </th>
-              <td>
+              <td className="flex flex-col">
                 <Link
                   to="/dashboard/editbook/:id"
                   className="btn btn-warning max-h-6 w-20 mb-2"
@@ -180,7 +129,7 @@ export default function BookManagementPage() {
                   <input type="checkbox" className="checkbox w-4 h-4" />
                 </label>
               </th>
-              <td>
+              <td className="flex flex-col">
                 <Link
                   to="/dashboard/editbook/:id"
                   className="btn btn-warning max-h-6 w-20 mb-2"
@@ -233,7 +182,60 @@ export default function BookManagementPage() {
                   <input type="checkbox" className="checkbox w-4 h-4" />
                 </label>
               </th>
+              <td className="flex flex-col">
+                <Link
+                  to="/dashboard/editbook/:id"
+                  className="btn btn-warning max-h-6 w-20 mb-2"
+                >
+                  Edit
+                </Link>
+                <button className="btn btn-error max-h-6 w-20 mt-2">
+                  Delete
+                </button>
+              </td>
               <td>
+                <div className="flex items-center gap-3">
+                  <div className="avatar">
+                    <div className="mask mask-squircle h-12 w-12">
+                      <img
+                        src="https://img.daisyui.com/images/profile/demo/2@94.webp"
+                        alt="Avatar Tailwind CSS Component"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="font-bold">Title</div>
+                    <div className="text-sm opacity-50">Language</div>
+                  </div>
+                </div>
+              </td>
+              <td>Zemlak, Daniel and Leannon</td>
+              <td>1990</td>
+              <td>1111111111111</td>
+              <td>
+                {"Lorem ipsum dolor sit, amet consectetur adipisicing elit Repellendus et".slice(
+                  0,
+                  30
+                )}
+              </td>
+              <td>Fiction</td>
+              <td>Paperback</td>
+              <td>English</td>
+              <td>UK</td>
+              <td>Patagonia Editions</td>
+              <td>140p</td>
+              <td>100</td>
+              <td>20</td>
+              <td>80</td>
+            </tr>
+            {/* row 1 */}
+            <tr>
+              <th>
+                <label>
+                  <input type="checkbox" className="checkbox w-4 h-4" />
+                </label>
+              </th>
+              <td className="flex flex-col">
                 <Link
                   to="/dashboard/editbook/:id"
                   className="btn btn-warning max-h-6 w-20 mb-2"

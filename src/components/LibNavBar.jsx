@@ -88,6 +88,7 @@ const LibNavBar = () => {
               >
                 Create Account
               </Link>
+              <p className="hidden">Log Out</p>
             </li>
             <li>
               <ThemeController />

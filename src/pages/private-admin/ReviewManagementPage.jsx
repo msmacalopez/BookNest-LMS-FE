@@ -5,7 +5,9 @@ export default function ReviewManagementPage() {
   return (
     <div>
       <div className="flex flex-col gap-2 md:flex-row md:gap-8 items-center justify-between">
-        <h1 className="text-primary text-2xl font-bold mb-3">Manage Reviews</h1>
+        <h1 className="text-primary text-2xl font-bold mb-3">
+          Reviews Management
+        </h1>
 
         {/* Search Bar */}
         <label className="input rounded-full max-h-9">
@@ -46,7 +48,7 @@ export default function ReviewManagementPage() {
       <hr />
       {/* Whole TABLE */}
       {/* max-w-screen-xl --> too big for my case*/}
-      <div className="w-full max-w-[calc(1280px-4rem)] mx-auto overflow-x-auto">
+      <div className="w-full max-w-full mx-auto overflow-x-auto">
         <table className="table w-full table-auto">
           {/* head */}
           <thead>
@@ -56,9 +58,10 @@ export default function ReviewManagementPage() {
               <th>ISBN</th>
               <th>User ID</th>
               <th>User Name</th>
-              <th>Date of Reviewed</th>
+              <th>Date of Review</th>
               <th>Review Comments</th>
               <th>Score Given</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -80,8 +83,9 @@ export default function ReviewManagementPage() {
               <td>25/05/2025</td>
               <td>Terrible Book</td>
               <td>1</td>
+              <td>Pending</td>
               {/* Actions */}
-              <td>
+              <td className="flex flex-col">
                 <button className="btn btn-success max-h-6 w-20 mb-2">
                   Approve
                 </button>
