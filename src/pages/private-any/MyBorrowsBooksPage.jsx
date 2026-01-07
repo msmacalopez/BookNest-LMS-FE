@@ -14,7 +14,8 @@ export default function MyBorrowsBooksPage() {
               <th>Title</th>
               <th>Borrowed Date</th>
               <th>Expected Return</th>
-              <th>Status</th>
+              <th>Effective Return</th>
+              <th>Loan Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -45,7 +46,10 @@ export default function MyBorrowsBooksPage() {
                 </span> */}
               </td>
               <td>20/05/2025</td>
+              <td>30/05/2025</td>
               <th>
+                <div className="badge badge-warning">Borrowed</div>
+                <span> </span>
                 <div className="badge badge-error">Overdue</div>
                 <span> </span>
                 {/* Only if reviewed */}
@@ -87,7 +91,10 @@ export default function MyBorrowsBooksPage() {
                 </span> */}
               </td>
               <td>20/05/2025</td>
+              <td>30/05/2025</td>
               <th>
+                <div className="badge badge-warning">Borrowed</div>
+                <span> </span>
                 <div className="badge badge-error">Overdue</div>
                 <span> </span>
                 {/* Only if reviewed */}
@@ -129,7 +136,10 @@ export default function MyBorrowsBooksPage() {
                 </span> */}
               </td>
               <td>20/05/2025</td>
+              <td>30/05/2025</td>
               <th>
+                <div className="badge badge-warning">Borrowed</div>
+                <span> </span>
                 <div className="badge badge-error">Overdue</div>
                 <span> </span>
                 {/* Only if reviewed */}
@@ -171,7 +181,10 @@ export default function MyBorrowsBooksPage() {
                 </span> */}
               </td>
               <td>20/05/2025</td>
+              <td>30/05/2025</td>
               <th>
+                <div className="badge badge-warning">Borrowed</div>
+                <span> </span>
                 <div className="badge badge-error">Overdue</div>
                 <span> </span>
                 {/* Only if reviewed */}
@@ -213,7 +226,10 @@ export default function MyBorrowsBooksPage() {
                 </span> */}
               </td>
               <td>20/05/2025</td>
+              <td>30/05/2025</td>
               <th>
+                <div className="badge badge-warning">Borrowed</div>
+                <span> </span>
                 <div className="badge badge-error">Overdue</div>
                 <span> </span>
                 {/* Only if reviewed */}
@@ -255,7 +271,10 @@ export default function MyBorrowsBooksPage() {
                 </span> */}
               </td>
               <td>20/05/2025</td>
+              <td>30/05/2025</td>
               <th>
+                <div className="badge badge-warning">Borrowed</div>
+                <span> </span>
                 <div className="badge badge-error">Overdue</div>
                 <span> </span>
                 {/* Only if reviewed */}
@@ -297,7 +316,10 @@ export default function MyBorrowsBooksPage() {
                 </span> */}
               </td>
               <td>20/05/2025</td>
+              <td>30/05/2025</td>
               <th>
+                <div className="badge badge-warning">Borrowed</div>
+                <span> </span>
                 <div className="badge badge-error">Overdue</div>
                 <span> </span>
                 {/* Only if reviewed */}
@@ -339,7 +361,10 @@ export default function MyBorrowsBooksPage() {
                 </span> */}
               </td>
               <td>20/05/2025</td>
+              <td>30/05/2025</td>
               <th>
+                <div className="badge badge-warning">Borrowed</div>
+                <span> </span>
                 <div className="badge badge-error">Overdue</div>
                 <span> </span>
                 {/* Only if reviewed */}
@@ -359,12 +384,12 @@ export default function MyBorrowsBooksPage() {
           {/* foot */}
           {/* <tfoot className="flex items-center"></tfoot> */}
         </table>
-        {/* Positioning */}
-        <div className="flex justify-center">
-          <div className="join grid grid-cols-2 mx-auto">
-            <button className="join-item btn btn-outline">Previous page</button>
-            <button className="join-item btn btn-outline">Next</button>
-          </div>
+      </div>
+      {/* Positioning */}
+      <div className="flex justify-center">
+        <div className="join grid grid-cols-2 mx-auto">
+          <button className="join-item btn btn-outline">Previous page</button>
+          <button className="join-item btn btn-outline">Next</button>
         </div>
       </div>
     </div>

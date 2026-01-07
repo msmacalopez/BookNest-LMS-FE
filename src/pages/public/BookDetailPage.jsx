@@ -25,6 +25,10 @@ export default function BookDetailPage() {
             <p>Stars</p>
           </div>
           <div className="flex gap-5">
+            <p className="font-bold uppercase">Genre:</p>
+            <p>Drama</p>
+          </div>
+          <div className="flex gap-5">
             <p className="font-bold uppercase">Description:</p>
             <p>
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Unde,
@@ -38,8 +42,8 @@ export default function BookDetailPage() {
             <p>Patagonia Editions</p>
           </div>
           <div className="flex gap-5">
-            <p className="font-bold uppercase">First Publish:</p>
-            <p>December 30th, 2014</p>
+            <p className="font-bold uppercase">Year:</p>
+            <p>2014</p>
           </div>
           <div className="flex gap-5">
             <p className="font-bold uppercase">ISBN:</p>
@@ -48,6 +52,10 @@ export default function BookDetailPage() {
           <div className="flex gap-5">
             <p className="font-bold uppercase">Language:</p>
             <p>English</p>
+          </div>
+          <div className="flex gap-5">
+            <p className="font-bold uppercase">Country:</p>
+            <p>UK</p>
           </div>
           <div className="flex gap-5">
             <p className="font-bold uppercase">Pages:</p>
