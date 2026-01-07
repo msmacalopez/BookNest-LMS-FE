@@ -26,9 +26,10 @@ import ProfilePage from "./pages/private-any/ProfilePage.jsx";
 import BookManagementPage from "./pages/private-admin/BookManagementPage.jsx";
 import BorrowManagementPage from "./pages/private-admin/BorrowManagementPage.jsx";
 import ReviewManagementPage from "./pages/private-admin/ReviewManagementPage.jsx";
-
+//Super Admin pages:
 import ManageAdmins from "./pages/private-system/ManageAdmins.jsx";
-import EditBookPage from "./pages/private-admin/EditBookPage.jsx";
+import AddEditBookPage from "./pages/private-admin/AddEditBookPage.jsx";
+import MembersManagementPage from "./pages/private-admin/MembersManagementPage.jsx";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -68,7 +69,8 @@ function App() {
               <Route path="books" element={<BookManagementPage />} />
               <Route path="borrows" element={<BorrowManagementPage />} />
               <Route path="reviews" element={<ReviewManagementPage />} />
-              <Route path="editbook/:id" element={<EditBookPage />} />
+              <Route path="members" element={<MembersManagementPage />} />
+              <Route path="editbook/:id" element={<AddEditBookPage />} />
               {/* Super Admins */}
               <Route path="admins" element={<ManageAdmins />} />
             </Route>

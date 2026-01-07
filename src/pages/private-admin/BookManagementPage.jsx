@@ -4,8 +4,12 @@ import { Link } from "react-router-dom";
 export default function BookManagementPage() {
   return (
     <div>
-      <div className="flex gap-8 items-center">
+      <div className="flex flex-col gap-2 md:flex-row md:gap-8 items-center">
         <h1 className="text-primary text-2xl font-bold mb-3">Manage Books</h1>
+        {/* BTN ADD */}
+        <Link to="/dashboard/editbook/:id" className="btn btn-success max-h-8">
+          Add New Book
+        </Link>
         {/* Search Bar */}
         <label className="input rounded-full max-h-9">
           <svg
@@ -26,12 +30,16 @@ export default function BookManagementPage() {
           </svg>
           <input type="search" required placeholder="Search" />
         </label>
-        <button className="btn btn-error max-h-8">Delete All Selections</button>
+        {/* BTN DELETE */}
+        <button className="btn btn-error max-h-8 mb-2 md:mb-0">
+          Delete All Selections
+        </button>
       </div>
       <hr />
       {/* Whole TABLE */}
-      <div className="w-full max-w-screen-xl mx-auto overflow-x-auto">
-        <table className="table w-screen table-auto">
+      {/* max-w-screen-xl --> too big for my case*/}
+      <div className="w-full max-w-[calc(1280px-4rem)] mx-auto overflow-x-auto">
+        <table className="table w-full table-auto">
           {/* head */}
           <thead>
             <tr>

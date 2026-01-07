@@ -11,17 +11,19 @@ export default function SideBar() {
       </div>
       {/* MEMBERS */}
       <div className="flex flex-col gap-3">
-        <p className="font-bold text-xl"> Menu</p>
+        <p className="font-bold text-xl">Menu</p>
+        <Link to="/dashboard">Dashboard</Link>
         <Link to="/dashboard/myborrows">My Borrows</Link>
         <Link to="/dashboard/profile">Profile</Link>
       </div>
       <hr />
       {/* ADMINS */}
       <div className="flex flex-col gap-3">
-        <p className="font-bold text-xl"> Admin Menu</p>
-        <Link to="/dashboard/books">Manage Books</Link>
-        <Link to="/dashboard/borrows">Manage Borrows</Link>
-        <Link to="/dashboard/reviews">Manage Review</Link>
+        <p className="font-bold text-xl"> Manage</p>
+        <Link to="/dashboard/books">Books</Link>
+        <Link to="/dashboard/borrows">Borrows</Link>
+        <Link to="/dashboard/reviews">Review</Link>
+        <Link to="/dashboard/members">Members</Link>
       </div>
       <hr />
       {/* SUPER ADMINS */}
