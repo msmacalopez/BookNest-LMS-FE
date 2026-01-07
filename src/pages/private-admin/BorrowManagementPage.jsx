@@ -35,6 +35,19 @@ export default function BorrowManagementPage() {
             </form>
 
             <form action="">
+              <label className="label">Borrow ID</label>
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  className="input w-full"
+                  placeholder="BW1234"
+                />
+                <button className="btn btn-primary mx-auto block">
+                  Search in Borrows
+                </button>
+              </div>
+            </form>
+            <form action="">
               <label className="label">Title</label>
               <div className="flex gap-3">
                 <input

@@ -13,14 +13,16 @@ export default function BorrowsResultOfSearch() {
           {/* head */}
           <thead>
             <tr>
-              <th>Title</th>
-              <th>Borrowed Date</th>
-              <th>Expected Return</th>
-              <th>Effective Return</th>
-              <th>Loan Status</th>
-              <th>Days Overdue</th>
-              <th>Member Status</th>
-              <th>Actions</th>
+              <th className="whitespace-normal">Title</th>
+              <th className="whitespace-normal">Borrowed Date</th>
+              <th className="whitespace-normal">Expected Return</th>
+              <th className="whitespace-normal">Effective Return</th>
+              <th className="whitespace-normal">Loan Status</th>
+              <th className="whitespace-normal">Days Overdue</th>
+              <th className="whitespace-normal">Member ID</th>
+              <th className="whitespace-normal">Member Name</th>
+              <th className="whitespace-normal">Member Status</th>
+              <th className="whitespace-normal">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -52,6 +54,8 @@ export default function BorrowsResultOfSearch() {
                   12
                 </div>
               </th>
+              <td>M1234</td>
+              <td>Maca Lopez</td>
               <th>
                 <div className="badge badge-warning">Active</div>
                 <span> </span>
@@ -93,6 +97,8 @@ export default function BorrowsResultOfSearch() {
                   12
                 </div>
               </th>
+              <td>M1234</td>
+              <td>Maca Lopez</td>
               <th>
                 <div className="badge badge-warning">Active</div>
                 <span> </span>
