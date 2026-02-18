@@ -1,4 +1,3 @@
-// create a authSlice. name is auth and initial state have user property
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -11,6 +10,11 @@ const authSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
+    },
+    logout: (state) => {
+      (state.user = null),
+        sessionStorage.removeItem("accessJWT"),
+        localStorage.removeItem("refreshJWT");
     },
   },
 });
