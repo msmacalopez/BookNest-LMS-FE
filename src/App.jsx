@@ -10,7 +10,7 @@ import { Route, Routes } from "react-router-dom";
 import LibNavBar from "./components/LibNavBar.jsx";
 import Footer from "./components/Footer.jsx";
 
-//imported pages/;
+//imported Layout/;
 import DashboardLayout from "./layouts/DashboardLayout.jsx";
 // public pages:
 import HomePage from "./pages/public/HomePage.jsx";
@@ -49,17 +49,6 @@ function App() {
             <Route path="/bookdetails" element={<BookDetailPage />} />
 
             {/* private routes */}
-            {/* <Route
-            path="/dashboard"
-            element={<DashboardLayout userRole={userRole} />}
-          >
-            <Route index element={<DashboardHome />} />
-            <Route path="borrowed" element={<BorrowedBooksPage />} />
-            <Route path="profile" element={<ProfilePage />} />
-            <Route path="books" element={<BookManagementPage />} />
-            <Route path="borrows" element={<BorrowManagementPage />} />
-            <Route path="reviews" element={<ReviewManagementPage />} />
-          </Route> */}
             <Route path="/dashboard" element={<DashboardLayout />}>
               {/* Logged In Members */}
               <Route index element={<DashboardHome />} />

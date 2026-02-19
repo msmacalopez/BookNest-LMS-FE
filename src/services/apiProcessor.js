@@ -18,8 +18,8 @@ export const apiProcessor = async ({
     const headers = {
       Authorization: isPrivate
         ? isRefreshToken
-          ? `Bearer ${localStorage.getItem("refreshJWT")}`
-          : `Bearer ${sessionStorage.getItem("accessJWT")}`
+          ? localStorage.getItem("refreshJWT")
+          : sessionStorage.getItem("accessJWT")
         : null,
       "Content-Type": contentType,
     };

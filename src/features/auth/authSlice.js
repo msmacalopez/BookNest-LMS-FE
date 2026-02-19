@@ -11,7 +11,7 @@ const authSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
     },
-    logout: (state) => {
+    logOut: (state) => {
       (state.user = null),
         sessionStorage.removeItem("accessJWT"),
         localStorage.removeItem("refreshJWT");
@@ -20,5 +20,5 @@ const authSlice = createSlice({
 });
 
 export const { reducer, actions } = authSlice;
-export const { setUser } = actions;
+export const { setUser, logOut } = actions;
 export default reducer;

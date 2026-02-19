@@ -16,7 +16,7 @@ export const loginUser = async (data) => {
 export const fetchUser = async () => {
   return apiProcessor({
     method: "get",
-    url: "/auth/users",
+    url: "/member/mydetails",
     isPrivate: true,
   });
 };

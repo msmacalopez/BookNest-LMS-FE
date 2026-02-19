@@ -7,18 +7,29 @@ import { useDispatch, useSelector } from "react-redux";
 // import { setUser } from "../features/auth/authSlice";
 import ThemeController from "./ThemeController.jsx";
 
+//redux logout
+import { logoutUserAction } from "../features/auth/authAction.js";
+import { useNavigate } from "react-router-dom";
+// import { useDispatch } from "react-redux";
+
 const LibNavBar = () => {
   //   const location = useLocation();
-  //   const { user } = useSelector((state) => state.authStore);
+  const { user } = useSelector((state) => state.authStore);
   //   const dispatch = useDispatch();
 
-  const handleOnLogout = () => {
-    // sessionStorage.removeItem("accessJWT");
-    // localStorage.removeItem("refreshJWT");
-    // dispatch(setUser({})); // Clear user from Redux store
-    console.log("logout");
-  };
+  //const handleOnLogout = () => {
+  // sessionStorage.removeItem("accessJWT");
+  // localStorage.removeItem("refreshJWT");
+  // dispatch(setUser({})); // Clear user from Redux store
+  //console.log("logout");
+  //};
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const handleOnLogout = () => {
+    dispatch(logoutUserAction());
+    navigate("/");
+  };
   return (
     <>
       <div className="navbar bg-base-100 shadow-md max-h-16 md:px-20">
@@ -47,21 +58,43 @@ const LibNavBar = () => {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
             >
               <li>
-                <Link to="/allbooks">Books</Link>
-              </li>
-              <li>
-                <Link to="/login" className="btn btn-primary text-white">
-                  Log In
-                </Link>
-              </li>
-              <li>
                 <Link
-                  to="/signup"
-                  className="btn btn-outline btn-primary text-dark"
+                  to="/allbooks"
+                  className="text-lg flex-items items-center justify-center my-0.5"
                 >
-                  Create Account
+                  Books
                 </Link>
               </li>
+
+              {user?._id ? (
+                <li>
+                  <button
+                    onClick={handleOnLogout}
+                    className="text-md flex-items items-center justify-center my-0.5 py-2"
+                  >
+                    LogOut
+                  </button>
+                </li>
+              ) : (
+                <>
+                  <li>
+                    <Link
+                      to="/login"
+                      className="btn btn-primary text-white my-0.5"
+                    >
+                      Log In
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/signup"
+                      className="btn btn-outline btn-primary text-dark my-0.5"
+                    >
+                      Create Account
+                    </Link>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
           {/* Logo BOOKNEST */}
@@ -76,20 +109,34 @@ const LibNavBar = () => {
             <li>
               <Link to="/allbooks">Books</Link>
             </li>
-            <li>
-              <Link to="/login" className="btn btn-primary text-white">
-                Log In
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/signup"
-                className="btn btn-outline btn-primary text-dark"
-              >
-                Create Account
-              </Link>
-              <p className="hidden">Log Out</p>
-            </li>
+
+            {user?._id ? (
+              <li>
+                <button
+                  onClick={handleOnLogout}
+                  className="text-md flex-items items-center justify-center"
+                >
+                  LogOut
+                </button>
+              </li>
+            ) : (
+              <>
+                <li>
+                  <Link to="/login" className="btn btn-primary text-white">
+                    Log In
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/signup"
+                    className="btn btn-outline btn-primary text-dark"
+                  >
+                    Create Account
+                  </Link>
+                  <p className="hidden">Log Out</p>
+                </li>
+              </>
+            )}
             <li>
               <ThemeController />
             </li>
