@@ -6,12 +6,62 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+//connecting to back end
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { registerUserAction } from "../../features/auth/authAction";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 export default function SignupPage() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    fName: "test",
+    lName: "test",
+    email: "test@gmail.com",
+    phone: "123",
+    address: "123 rd",
+    password: "123",
+    confirmPassword: "123",
+  });
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+
+    if (form.password !== form.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    const payload = {
+      fName: form.fName,
+      lName: form.lName,
+      email: form.email,
+      phone: form.phone,
+      address: form.address,
+      password: form.password,
+    };
+
+    const res = await dispatch(registerUserAction(payload));
+
+    if (res?.status === "success") {
+      toast.success("Registration successful!");
+      navigate("/login");
+    }
+  };
+
   return (
     <div className="min-h-[80vh] flex items-center justify-center py-8">
       <div className="w-full max-w-[80vw] md:max-w-[70vw] lg:max-w-[60vw] ">
         <form
-          // onSubmit={handleSubmit}
+          onSubmit={handleOnSubmit}
           className="bg-white shadow-lg rounded-lg p-8"
         >
           <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
@@ -19,18 +69,34 @@ export default function SignupPage() {
           </h2>
 
           <div className="space-y-4 md:grid md:grid-cols-2 md:gap-5">
-            {/* Full Name */}
+            {/* Name */}
             <div>
-              <label className="block text-gray-700 mb-2">Full Name</label>
+              <label className="block text-gray-700 mb-2">Name</label>
               <div className="relative">
                 <FaUser className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
-                  name="fullName"
-                  // value={formData.fullName}
-                  // onChange={handleChange}
+                  name="fName"
+                  value={form.fName}
+                  onChange={handleOnChange}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="John Doe"
+                  placeholder="John"
+                  required
+                />
+              </div>
+            </div>
+            {/* Last Name*/}
+            <div>
+              <label className="block text-gray-700 mb-2">Lastname</label>
+              <div className="relative">
+                <FaUser className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  name="lName"
+                  value={form.lName}
+                  onChange={handleOnChange}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Doe"
                   required
                 />
               </div>
@@ -44,8 +110,8 @@ export default function SignupPage() {
                 <input
                   type="email"
                   name="email"
-                  // value={formData.email}
-                  // onChange={handleChange}
+                  value={form.email}
+                  onChange={handleOnChange}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="john@example.com"
                   required
@@ -61,8 +127,8 @@ export default function SignupPage() {
                 <input
                   type="tel"
                   name="phone"
-                  // value={formData.phone}
-                  // onChange={handleChange}
+                  value={form.phone}
+                  onChange={handleOnChange}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="1234567890"
                   required
@@ -78,25 +144,25 @@ export default function SignupPage() {
                 <input
                   type="text"
                   name="address"
-                  // value={formData.address}
-                  // onChange={handleChange}
+                  value={form.address}
+                  onChange={handleOnChange}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="123 Main St"
                   required
                 />
               </div>
             </div>
-
+            <br />
             {/* Password */}
             <div>
               <label className="block text-gray-700 mb-2">Password</label>
               <div className="relative">
                 <FaLock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
                 <input
-                  // type={showPassword ? "text" : "password"}
+                  type="password"
                   name="password"
-                  // value={formData.password}
-                  // onChange={handleChange}
+                  value={form.password}
+                  onChange={handleOnChange}
                   className="w-full pl-10 pr-12 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Min 8 characters"
                   required
@@ -125,8 +191,8 @@ export default function SignupPage() {
                 <input
                   type="password"
                   name="confirmPassword"
-                  // value={formData.confirmPassword}
-                  // onChange={handleChange}
+                  value={form.confirmPassword}
+                  onChange={handleOnChange}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Confirm password"
                   required

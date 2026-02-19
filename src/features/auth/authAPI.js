@@ -36,3 +36,12 @@ export const fetchNewAccessJWT = async () => {
   }
   return false;
 };
+
+//register user
+export const registerUser = async (data) =>
+  apiProcessor({
+    method: "post",
+    url: "/member/register",
+    data,
+    isPrivate: false,
+  });

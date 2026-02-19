@@ -1,6 +1,11 @@
 import { toast } from "react-toastify";
 import { setUser, logOut as logoutSlice } from "./authSlice";
-import { loginUser, fetchUser, fetchNewAccessJWT } from "./authAPI";
+import {
+  loginUser,
+  fetchUser,
+  fetchNewAccessJWT,
+  registerUser,
+} from "./authAPI";
 
 // LOGIN
 export const loginUserAction = (form) => async (dispatch) => {
@@ -94,4 +99,24 @@ export const logoutUserAction = () => (dispatch) => {
   localStorage.removeItem("refreshJWT");
   dispatch(logoutSlice());
   dispatch(setUser({})); // Clear user from Redux store
+};
+
+export const registerUserAction = (form) => async (dispatch) => {
+  try {
+    const pending = registerUser(form);
+    toast.promise(pending, { pending: "Registering..." });
+
+    const res = await pending;
+    console.log("REGISTER RES:", res);
+
+    const { status, message } = res || {};
+    toast[status](message || "Registration response received");
+
+    return res;
+  } catch (e) {
+    toast.error(
+      e?.response?.data?.message || e.message || "Registration failed"
+    );
+    return { status: "error", message: e.message };
+  }
 };
