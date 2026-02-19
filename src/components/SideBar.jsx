@@ -10,9 +10,10 @@ export default function SideBar() {
   const location = useLocation();
 
   const memberItems = [
-    { name: "Dashboard", path: "/dashboard" },
+    // { name: "Dashboard", path: "/dashboard" },
     { name: "My Borrows", path: "/dashboard/myborrows" },
     { name: "Profile", path: "/dashboard/profile" },
+    { name: "My Reviews", path: "/dashboard/myreviews" },
   ];
 
   const adminItems = [
@@ -30,12 +31,14 @@ export default function SideBar() {
     <div className="flex flex-col gap-5">
       {/* title */}
       <div>
-        <h1 className="font-bold text-2xl text-white">Hi Maca!</h1>
+        <h1 className="font-bold text-2xl text-white">{user.fName}</h1>
         <h2 className="font-mono text-accent">Welcome to your Dashboard! </h2>
       </div>
       {/* MEMBERS */}
       <div className="flex flex-col gap-3">
-        <p className="font-bold text-xl">Menu</p>
+        <Link to="/dashboard" className="font-bold text-xl">
+          Dashboard
+        </Link>
         {memberItems.map((item) => (
           <NavLink
             key={item.path}

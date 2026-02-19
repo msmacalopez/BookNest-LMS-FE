@@ -111,14 +111,19 @@ const LibNavBar = () => {
             </li>
 
             {user?._id ? (
-              <li>
-                <button
-                  onClick={handleOnLogout}
-                  className="text-md flex-items items-center justify-center"
-                >
-                  LogOut
-                </button>
-              </li>
+              <>
+                <li>
+                  <Link to="/dashboard">My Dashboard</Link>
+                </li>
+                <li>
+                  <button
+                    onClick={handleOnLogout}
+                    className="text-sm flex-items items-center justify-center h-10 p-2.5"
+                  >
+                    LogOut
+                  </button>
+                </li>
+              </>
             ) : (
               <>
                 <li>

@@ -25,6 +25,7 @@ import SignupPage from "./pages/public/SignupPage.jsx";
 import DashboardHome from "./pages/private-any/DashboardHome.jsx";
 import MyBorrowsBooksPage from "./pages/private-any/MyBorrowsBooksPage.jsx";
 import ProfilePage from "./pages/private-any/ProfilePage.jsx";
+import MyReviews from "./pages/private-any/MyReviews.jsx";
 // admin pages:
 import BookManagementPage from "./pages/private-admin/BookManagementPage.jsx";
 import BorrowManagementPage from "./pages/private-admin/BorrowManagementPage.jsx";
@@ -61,6 +62,7 @@ function App() {
               <Route index element={<DashboardHome />} />
               <Route path="myborrows" element={<MyBorrowsBooksPage />} />
               <Route path="profile" element={<ProfilePage />} />
+              <Route path="myreviews" element={<MyReviews />} />
 
               {/* Admins */}
               <Route path="books" element={<BookManagementPage />} />
