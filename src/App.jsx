@@ -1,10 +1,13 @@
 import { useState } from "react";
 import "./App.css";
+import { Route, Routes } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { autoLoginUserAction } from "./features/auth/authAction.js";
 
 // Toastify:
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast, Bounce } from "react-toastify";
-import { Route, Routes } from "react-router-dom";
 
 // imported components:
 import LibNavBar from "./components/LibNavBar.jsx";
@@ -33,7 +36,11 @@ import MembersManagementPage from "./pages/private-admin/MembersManagementPage.j
 import BorrowsResultOfSearch from "./pages/private-admin/BorrowsResultOfSearch.jsx";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(autoLoginUserAction);
+  }, [dispatch]);
 
   return (
     <>

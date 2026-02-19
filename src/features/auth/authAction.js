@@ -66,7 +66,7 @@ export const fetchUserAction = () => async (dispatch) => {
   }
 };
 
-// AUTO LOGIN (rehydrate on refresh)
+// AUTO LOGIN (rehydrate on refresh) -> when refresh the page
 export const autoLoginUserAction = () => async (dispatch) => {
   const accessJWT = sessionStorage.getItem("accessJWT");
   const refreshJWT = localStorage.getItem("refreshJWT");
