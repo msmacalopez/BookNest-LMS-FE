@@ -7,9 +7,7 @@ export default function BookCard2({ book }) {
   const { _id, title, genre, author, description } = book;
 
   const coverImageUrl =
-    book?.thumbnail ||
-    book?.coverUrl ||
-    book?.image ||
+    book?.coverImageUrl ||
     "https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp";
 
   const shortDesc =

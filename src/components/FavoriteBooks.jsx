@@ -1,7 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BookCard from "./BookCard";
 
+//from redux
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchPopularBooks,
+  fetchLatestBooks,
+} from "../features/book/bookSlice";
+
 export default function FavoriteBooks() {
+  const dispatch = useDispatch();
+
+  const { popular, latest } = useSelector((state) => state.bookStore);
+
+  useEffect(() => {
+    if (!popular.items.length) {
+      dispatch(fetchPopularBooks({ limit: 3 }));
+    }
+
+    if (!latest.items.length) {
+      dispatch(fetchLatestBooks({ limit: 3 }));
+    }
+  }, [dispatch]);
+
   return (
     <div className="card flex flex-col items-center justify-center my-10">
       {/* Search Input */}
@@ -28,25 +49,32 @@ export default function FavoriteBooks() {
         </svg>
         <input
           type="search"
-          required
           placeholder="Search for your favorites books (e.g. Quijote, Sherlock Holmes...)"
         />
       </label>
       {/* List of Top */}
       <h2 className="text-primary text-4xl font-bold my-10">Top Books</h2>
+
+      {popular.loading && <p>Loading...</p>}
+      {popular.error && <p className="text-red-500">{popular.error}</p>}
+
       <div className="flex flex-col gap-6 md:flex-row">
-        <BookCard />
-        <BookCard />
-        <BookCard />
+        {popular.items.map((book) => (
+          <BookCard key={book._id} book={book} barge="TOP" />
+        ))}
       </div>
       {/* List of New Books */}
       <h2 className="text-primary text-4xl font-bold my-10">
         New in Catalogue
       </h2>
+
+      {latest.loading && <p>Loading...</p>}
+      {latest.error && <p className="text-red-500">{latest.error}</p>}
+
       <div className="flex flex-col gap-6 md:flex-row">
-        <BookCard />
-        <BookCard />
-        <BookCard />
+        {latest.items.map((book) => (
+          <BookCard key={book._id} book={book} barge="NEW" />
+        ))}
       </div>
     </div>
   );

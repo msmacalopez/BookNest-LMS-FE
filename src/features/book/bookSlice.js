@@ -14,7 +14,7 @@ const extractOne = (res) => {
   return res?.book ?? res?.result ?? res?.data ?? res;
 };
 
-// ✅ Catalog (AllBooks)
+// Catalog (AllBooks)
 export const fetchCatalogBooks = createAsyncThunk(
   "books/fetchCatalogBooks",
   async ({ q = "", page = 1, limit = 12 } = {}, { rejectWithValue }) => {
@@ -25,7 +25,7 @@ export const fetchCatalogBooks = createAsyncThunk(
   }
 );
 
-// ✅ Latest additions (Home)
+// Latest additions (Home)
 export const fetchLatestBooks = createAsyncThunk(
   "books/fetchLatestBooks",
   async ({ limit = 6 } = {}, { rejectWithValue }) => {
@@ -38,7 +38,7 @@ export const fetchLatestBooks = createAsyncThunk(
   }
 );
 
-// ✅ Popular books (Home)
+// Popular books (Home)
 export const fetchPopularBooks = createAsyncThunk(
   "books/fetchPopularBooks",
   async ({ limit = 6 } = {}, { rejectWithValue }) => {
@@ -50,7 +50,7 @@ export const fetchPopularBooks = createAsyncThunk(
   }
 );
 
-// ✅ One public active book
+// One public active book
 export const fetchActiveBook = createAsyncThunk(
   "books/fetchActiveBook",
   async (bookId, { rejectWithValue }) => {
@@ -61,7 +61,7 @@ export const fetchActiveBook = createAsyncThunk(
   }
 );
 
-// ✅ Admin list
+// Admin list
 export const fetchAdminBooks = createAsyncThunk(
   "books/fetchAdminBooks",
   async ({ q = "", page = 1, limit = 12 } = {}, { rejectWithValue }) => {
@@ -72,7 +72,7 @@ export const fetchAdminBooks = createAsyncThunk(
   }
 );
 
-// ✅ Admin check 1 book
+// Admin check 1 book
 export const fetchAdminBook = createAsyncThunk(
   "books/fetchActiveBook",
   async (bookId, { rejectWithValue }) => {
