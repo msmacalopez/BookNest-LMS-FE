@@ -8,6 +8,9 @@ import { BrowserRouter } from "react-router-dom";
 //redux store
 import store from "./redux/store.js";
 import { Provider } from "react-redux";
+import { autoLoginUserAction } from "./features/auth/authAction";
+
+store.dispatch(autoLoginUserAction());
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

@@ -6,7 +6,9 @@ const Auth = ({ children }) => {
   const location = useLocation();
 
   //read reduxStore to get user info and check if user is logged in
-  const { user } = useSelector((state) => state.authStore);
+  const { user, isAuthReady } = useSelector((state) => state.authStore);
+
+  if (!isAuthReady) return null; // or loading spinner
 
   // state.authStore.user exist, then render children
   return user?._id ? (

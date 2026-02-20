@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { setUser, logOut as logoutSlice } from "./authSlice";
+import { setUser, logOut as logoutSlice, setAuthReady } from "./authSlice";
 import {
   loginUser,
   fetchUser,
@@ -76,20 +76,24 @@ export const autoLoginUserAction = () => async (dispatch) => {
   const accessJWT = sessionStorage.getItem("accessJWT");
   const refreshJWT = localStorage.getItem("refreshJWT");
 
-  // If access token exists, fetch profile
-  if (accessJWT) {
-    await dispatch(fetchUserAction());
-    return;
-  }
-
-  // If only refresh exists, renew access then fetch profile
-  if (refreshJWT) {
-    const renewed = await fetchNewAccessJWT();
-    if (renewed) {
+  try {
+    // If access token exists, fetch profile
+    if (accessJWT) {
       await dispatch(fetchUserAction());
-    } else {
-      dispatch(logoutUserAction());
+      return;
     }
+
+    // If only refresh exists, renew access then fetch profile
+    if (refreshJWT) {
+      const renewed = await fetchNewAccessJWT();
+      if (renewed) {
+        await dispatch(fetchUserAction());
+      } else {
+        dispatch(logoutUserAction());
+      }
+    }
+  } finally {
+    dispatch(setAuthReady(true)); // Set auth ready regardless of outcome
   }
 };
 

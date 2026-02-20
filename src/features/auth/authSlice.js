@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: {},
+  isAuthReady: false,
 };
 
 const authSlice = createSlice({
@@ -16,9 +17,12 @@ const authSlice = createSlice({
         sessionStorage.removeItem("accessJWT"),
         localStorage.removeItem("refreshJWT");
     },
+    setAuthReady: (state, action) => {
+      state.isAuthReady = action.payload;
+    },
   },
 });
 
 export const { reducer, actions } = authSlice;
-export const { setUser, logOut } = actions;
+export const { setUser, logOut, setAuthReady } = actions;
 export default reducer;
