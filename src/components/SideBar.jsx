@@ -31,8 +31,10 @@ export default function SideBar() {
     <div className="flex flex-col gap-5">
       {/* title */}
       <div>
-        <h1 className="font-bold text-2xl text-white">{user.fName}</h1>
-        <h2 className="font-mono text-accent">Welcome to your Dashboard! </h2>
+        {/* <h1 className="font-bold text-2xl text-white">{user.fName}</h1> */}
+        <h1 className="font-mono text-accent text-2xl">
+          Welcome {user.fName}!
+        </h1>
       </div>
       {/* MEMBERS */}
       <div className="flex flex-col gap-3">
