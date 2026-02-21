@@ -6,19 +6,21 @@ import {
   fetchBookByIdAdmin,
 } from "./bookAPI";
 
-const extractList = (res) => {
-  return res?.books ?? res?.result ?? res?.data ?? [];
-};
-
-const extractOne = (res) => {
-  return res?.book ?? res?.result ?? res?.data ?? res;
-};
+const extractList = (res) => res?.data ?? []; //controller returns data
+const extractOne = (res) => res?.book ?? res?.data ?? res; //for single endpoints if they return {data: book}
 
 // Catalog (AllBooks)
 export const fetchCatalogBooks = createAsyncThunk(
   "books/fetchCatalogBooks",
   async ({ q = "", page = 1, limit = 12 } = {}, { rejectWithValue }) => {
-    const res = await fetchAllActiveBooks({ q, page, limit });
+    const res = await fetchAllActiveBooks({
+      q,
+      page,
+      limit,
+      sortBy: "createdAt",
+      sortOrder: "desc",
+    });
+
     if (res?.status === "error")
       return rejectWithValue(res?.message || "Failed to load books");
     return { list: extractList(res), meta: res, q, page, limit };
@@ -31,7 +33,15 @@ export const fetchLatestBooks = createAsyncThunk(
   async ({ limit = 6 } = {}, { rejectWithValue }) => {
     // Just fetch page 1, limit N.
     // If you later add backend sort, we’ll adjust here.
-    const res = await fetchAllActiveBooks({ q: "", page: 1, limit });
+
+    const res = await fetchAllActiveBooks({
+      q: "",
+      page: 1,
+      limit,
+      sortBy: "createdAt",
+      sortOrder: "desc",
+    });
+
     if (res?.status === "error")
       return rejectWithValue(res?.message || "Failed to load latest books");
     return { list: extractList(res), meta: res };
@@ -43,7 +53,14 @@ export const fetchPopularBooks = createAsyncThunk(
   "books/fetchPopularBooks",
   async ({ limit = 6 } = {}, { rejectWithValue }) => {
     // If you later create /books/popular, replace this with that.
-    const res = await fetchAllActiveBooks({ q: "", page: 1, limit });
+    const res = await fetchAllActiveBooks({
+      q: "",
+      page: 1,
+      limit,
+      sortBy: "timesBorrowed",
+      sortOrder: "desc",
+    });
+
     if (res?.status === "error")
       return rejectWithValue(res?.message || "Failed to load popular books");
     return { list: extractList(res), meta: res };
@@ -74,7 +91,7 @@ export const fetchAdminBooks = createAsyncThunk(
 
 // Admin check 1 book
 export const fetchAdminBook = createAsyncThunk(
-  "books/fetchActiveBook",
+  "books/fetchAdminBook",
   async (bookId, { rejectWithValue }) => {
     const res = await fetchBookByIdAdmin(bookId);
     if (res?.status === "error")

@@ -4,11 +4,16 @@ export const fetchAllActiveBooks = async ({
   q = "",
   page = 1,
   limit = 10,
+  sortBy = "createdAt",
+  sortOrder = "desc",
 } = {}) => {
   const params = new URLSearchParams();
+
   if (q) params.set("q", q);
-  if (page) params.set("page", page);
-  if (limit) params.set("limit", limit);
+  if (page) params.set("page", String(page));
+  if (limit) params.set("limit", String(limit));
+  if (sortBy) params.set("sortBy", sortBy);
+  if (sortOrder) params.set("sortOrder", sortOrder);
 
   return apiProcessor({
     method: "get",
