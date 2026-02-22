@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import BookCard2 from "../../components/BookCard2";
 
 //integration - redux
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchCatalogBooks,
+  resetCatalog,
   setCatalogPage,
   setCatalogQuery,
 } from "../../features/book/bookSlice";
@@ -15,9 +16,23 @@ export default function AllBooksPage() {
     (state) => state.bookStore.catalog
   );
 
-  const [searchInput, setSearchInput] = useState(q || "");
+  const [searchInput, setSearchInput] = useState("");
 
-  // Load initial or when page/q changes
+  // ✅ prevent double-run reset in React StrictMode dev
+  const didInit = useRef(false);
+
+  // Fetch ONLY once when page is entered
+  useEffect(() => {
+    if (didInit.current) return;
+    didInit.current = true;
+    //when entering the page, clear previous search:
+    dispatch(resetCatalog());
+    //load page 1 without any input
+    dispatch(fetchCatalogBooks({ q: "", page: 1, limit }));
+    setSearchInput("");
+  }, [dispatch, limit]);
+
+  // Fetch whenever committed query/page changes
   useEffect(() => {
     dispatch(fetchCatalogBooks({ q, page, limit }));
   }, [dispatch, q, page, limit]);
@@ -59,9 +74,19 @@ export default function AllBooksPage() {
           </svg>
           <input
             type="search"
-            placeholder="Search for your favorites books (e.g. Quijote, Sherlock Holmes...)"
+            placeholder="Search books by Title, Author, etc...)"
             value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
+            // next, when input empty, reset the search
+            onChange={(e) => {
+              const value = e.target.value;
+              setSearchInput(value);
+
+              if (value === "") {
+                console.log("clear");
+                dispatch(setCatalogPage(1));
+                dispatch(setCatalogQuery(""));
+              }
+            }}
           />
         </label>
       </form>

@@ -24,9 +24,9 @@ export default function FavoriteBooks() {
   }, [dispatch]);
 
   return (
-    <div className="card flex flex-col items-center justify-center my-10">
+    <div className="card flex flex-col items-center justify-center mb-10">
       {/* Search Input */}
-      <label
+      {/* <label
         className="input rounded-full md:w-200 focus-within:border-gray-100
     focus-within:ring-0
     focus-within:shadow-none"
@@ -51,7 +51,7 @@ export default function FavoriteBooks() {
           type="search"
           placeholder="Search for your favorites books (e.g. Quijote, Sherlock Holmes...)"
         />
-      </label>
+      </label> */}
       {/* List of Top */}
       <h2 className="text-primary text-4xl font-bold my-10">Top Books</h2>
 

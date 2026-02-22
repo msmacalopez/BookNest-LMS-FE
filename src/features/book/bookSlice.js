@@ -148,6 +148,18 @@ const bookSlice = createSlice({
     setCatalogPage: (state, action) => {
       state.catalog.page = action.payload;
     },
+    resetCatalog: (state) => {
+      state.catalog.q = "";
+      state.catalog.page = 1;
+      state.catalog.items = [];
+      state.catalog.error = "";
+      state.catalog.loading = false;
+      state.catalog.meta = null;
+    },
+    resetCatInNavBar: (state) => {
+      state.catalog.q = "";
+      state.catalog.page = 1;
+    },
     clearActiveBook: (state) => {
       state.activeBook.item = null;
       state.activeBook.error = "";
@@ -255,6 +267,11 @@ const bookSlice = createSlice({
   },
 });
 
-export const { setCatalogQuery, setCatalogPage, clearActiveBook } =
-  bookSlice.actions;
+export const {
+  setCatalogQuery,
+  setCatalogPage,
+  clearActiveBook,
+  resetCatalog,
+  resetCatInNavBar,
+} = bookSlice.actions;
 export default bookSlice.reducer;

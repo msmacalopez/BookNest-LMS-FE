@@ -1,7 +1,7 @@
 import React from "react";
 import { PiBookOpenBold } from "react-icons/pi";
 
-import { Link, useLocation } from "react-router";
+import { Link, useLocation } from "react-router-dom";
 import { COLORS } from "../../theme.js";
 import { useDispatch, useSelector } from "react-redux";
 // import { setUser } from "../features/auth/authSlice";
@@ -10,7 +10,12 @@ import ThemeController from "./ThemeController.jsx";
 //redux logout
 import { logoutUserAction } from "../features/auth/authAction.js";
 import { useNavigate } from "react-router-dom";
-// import { useDispatch } from "react-redux";
+import {
+  resetCatalog,
+  setCatalogQuery,
+  setCatalogPage,
+  resetCatInNavBar,
+} from "../features/book/bookSlice.js";
 
 const LibNavBar = () => {
   //   const location = useLocation();
@@ -61,6 +66,9 @@ const LibNavBar = () => {
                 <Link
                   to="/allbooks"
                   className="text-lg flex-items items-center justify-center my-0.5"
+                  onClick={() => {
+                    dispatch(resetCatInNavBar());
+                  }}
                 >
                   Books
                 </Link>

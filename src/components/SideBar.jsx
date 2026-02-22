@@ -32,9 +32,7 @@ export default function SideBar() {
       {/* title */}
       <div>
         {/* <h1 className="font-bold text-2xl text-white">{user.fName}</h1> */}
-        <h1 className="font-mono text-accent text-2xl">
-          Welcome {user.fName}!
-        </h1>
+        <h1 className="font-mono text-accent text-2xl">Hello {user.fName}!</h1>
       </div>
       {/* MEMBERS */}
       <div className="flex flex-col gap-3">
