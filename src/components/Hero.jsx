@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function Hero() {
+  const { user } = useSelector((state) => state.authStore);
+
   return (
     <div>
       <div
@@ -22,11 +25,16 @@ export default function Hero() {
               and management.
             </p>
             <div>
-              <Link to="/signup" className="btn btn-primary me-2">
-                Get Started
-              </Link>
+              {!user?._id && (
+                <Link to="/signup" className="btn btn-primary me-2">
+                  Get Started
+                </Link>
+              )}
 
-              <Link to="/allbooks" className="btn btn-outline-primary ms-2">
+              <Link
+                to="/allbooks"
+                className="btn btn-outline-primary ms-2 border-primary border-2 text-primary"
+              >
                 Browse Books
               </Link>
             </div>

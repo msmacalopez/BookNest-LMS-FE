@@ -50,7 +50,7 @@ function App() {
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/books/:id" element={<BookDetailPage />} />
+            <Route path="/books/:bookId" element={<BookDetailPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/allbooks" element={<AllBooksPage />} />

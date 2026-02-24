@@ -32,7 +32,7 @@ export const searchPublicBooksAPI = (params) =>
 export const fetchActiveBookById = async (id) =>
   apiProcessor({
     method: "get",
-    url: `/books/books/${id}`, // match your rest.http: GET {{bookEP}}/books/:id
+    url: `/books/book/${id}`,
     isPrivate: false,
   });
 
