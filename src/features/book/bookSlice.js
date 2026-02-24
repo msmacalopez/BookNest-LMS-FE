@@ -1,140 +1,37 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  fetchAllActiveBooks,
-  fetchActiveBookById,
-  fetchAdminAllBooks,
-  fetchBookByIdAdmin,
-} from "./bookAPI";
+// bookSlice.js
+import { createSlice } from "@reduxjs/toolkit";
 
-const extractList = (res) => res?.data ?? []; //controller returns data
-const extractOne = (res) => res?.book ?? res?.data ?? res; //for single endpoints if they return {data: book}
-
-// Catalog (AllBooks)
-export const fetchCatalogBooks = createAsyncThunk(
-  "books/fetchCatalogBooks",
-  async ({ q = "", page = 1, limit = 12 } = {}, { rejectWithValue }) => {
-    const res = await fetchAllActiveBooks({
-      q,
-      page,
-      limit,
-      sortBy: "createdAt",
-      sortOrder: "desc",
-    });
-
-    if (res?.status === "error")
-      return rejectWithValue(res?.message || "Failed to load books");
-    return { list: extractList(res), meta: res, q, page, limit };
-  }
-);
-
-// Latest additions (Home)
-export const fetchLatestBooks = createAsyncThunk(
-  "books/fetchLatestBooks",
-  async ({ limit = 6 } = {}, { rejectWithValue }) => {
-    // Just fetch page 1, limit N.
-    // If you later add backend sort, we’ll adjust here.
-
-    const res = await fetchAllActiveBooks({
-      q: "",
-      page: 1,
-      limit,
-      sortBy: "createdAt",
-      sortOrder: "desc",
-    });
-
-    if (res?.status === "error")
-      return rejectWithValue(res?.message || "Failed to load latest books");
-    return { list: extractList(res), meta: res };
-  }
-);
-
-// Popular books (Home)
-export const fetchPopularBooks = createAsyncThunk(
-  "books/fetchPopularBooks",
-  async ({ limit = 6 } = {}, { rejectWithValue }) => {
-    // If you later create /books/popular, replace this with that.
-    const res = await fetchAllActiveBooks({
-      q: "",
-      page: 1,
-      limit,
-      sortBy: "timesBorrowed",
-      sortOrder: "desc",
-    });
-
-    if (res?.status === "error")
-      return rejectWithValue(res?.message || "Failed to load popular books");
-    return { list: extractList(res), meta: res };
-  }
-);
-
-// One public active book
-export const fetchActiveBook = createAsyncThunk(
-  "books/fetchActiveBook",
-  async (bookId, { rejectWithValue }) => {
-    const res = await fetchActiveBookById(bookId);
-    if (res?.status === "error")
-      return rejectWithValue(res?.message || "Failed to load book");
-    return extractOne(res);
-  }
-);
-
-// Admin list
-export const fetchAdminBooks = createAsyncThunk(
-  "books/fetchAdminBooks",
-  async ({ q = "", page = 1, limit = 12 } = {}, { rejectWithValue }) => {
-    const res = await fetchAdminAllBooks({ q, page, limit });
-    if (res?.status === "error")
-      return rejectWithValue(res?.message || "Failed to load admin books");
-    return { list: extractList(res), meta: res, q, page, limit };
-  }
-);
-
-// Admin check 1 book
-export const fetchAdminBook = createAsyncThunk(
-  "books/fetchAdminBook",
-  async (bookId, { rejectWithValue }) => {
-    const res = await fetchBookByIdAdmin(bookId);
-    if (res?.status === "error")
-      return rejectWithValue(res?.message || "Failed to load book");
-    return extractOne(res);
-  }
-);
+const DEFAULT_LIMIT = 10;
 
 const initialState = {
-  catalog: {
+  // homepage
+  popular: {
     items: [],
-    q: "",
-    page: 1,
-    limit: 12,
     loading: false,
-    error: "",
-    meta: null, // keep pagination info if backend provides
+    error: null,
   },
   latest: {
     items: [],
     loading: false,
-    error: "",
-    meta: null,
+    error: null,
   },
-  popular: {
+
+  // All Books Page
+  catalog: {
     items: [],
+    pagination: { total: 0, page: 1, limit: DEFAULT_LIMIT, pages: 0 },
     loading: false,
-    error: "",
-    meta: null,
-  },
-  activeBook: {
-    item: null,
-    loading: false,
-    error: "",
-  },
-  admin: {
-    items: [],
-    q: "",
-    page: 1,
-    limit: 12,
-    loading: false,
-    error: "",
-    meta: null,
+    error: null,
+    lastQuery: {
+      mode: "public",
+      params: {
+        q: "",
+        page: 1,
+        limit: DEFAULT_LIMIT,
+        sortBy: "createdAt",
+        sortOrder: "desc",
+      },
+    },
   },
 };
 
@@ -142,136 +39,121 @@ const bookSlice = createSlice({
   name: "books",
   initialState,
   reducers: {
-    setCatalogQuery: (state, action) => {
-      state.catalog.q = action.payload;
+    // -----------------------------
+    // CATALOG (AllBooksPage)
+    // -----------------------------
+    setCatalogLoading: (s, a) => {
+      s.catalog.loading = a.payload;
     },
-    setCatalogPage: (state, action) => {
-      state.catalog.page = action.payload;
+    setCatalogError: (s, a) => {
+      s.catalog.error = a.payload;
     },
-    resetCatalog: (state) => {
-      state.catalog.q = "";
-      state.catalog.page = 1;
-      state.catalog.items = [];
-      state.catalog.error = "";
-      state.catalog.loading = false;
-      state.catalog.meta = null;
+    setCatalogSearchResult: (s, a) => {
+      const { items, pagination, mode, params } = a.payload;
+      s.catalog.items = items;
+      s.catalog.pagination = pagination ?? s.catalog.pagination;
+      s.catalog.lastQuery = {
+        mode: mode ?? "public",
+        params: params ?? s.catalog.lastQuery.params,
+      };
     },
-    resetCatInNavBar: (state) => {
-      state.catalog.q = "";
-      state.catalog.page = 1;
-    },
-    clearActiveBook: (state) => {
-      state.activeBook.item = null;
-      state.activeBook.error = "";
-      state.activeBook.loading = false;
-    },
-  },
-  extraReducers: (builder) => {
-    // catalog
-    builder
-      .addCase(fetchCatalogBooks.pending, (state) => {
-        state.catalog.loading = true;
-        state.catalog.error = "";
-      })
-      .addCase(fetchCatalogBooks.fulfilled, (state, action) => {
-        state.catalog.loading = false;
-        state.catalog.items = Array.isArray(action.payload.list)
-          ? action.payload.list
-          : [];
-        state.catalog.meta = action.payload.meta || null;
-        state.catalog.q = action.payload.q;
-        state.catalog.page = action.payload.page;
-        state.catalog.limit = action.payload.limit;
-      })
-      .addCase(fetchCatalogBooks.rejected, (state, action) => {
-        state.catalog.loading = false;
-        state.catalog.error = action.payload || action.error.message;
-        state.catalog.items = [];
-      });
 
-    // latest
-    builder
-      .addCase(fetchLatestBooks.pending, (state) => {
-        state.latest.loading = true;
-        state.latest.error = "";
-      })
-      .addCase(fetchLatestBooks.fulfilled, (state, action) => {
-        state.latest.loading = false;
-        state.latest.items = Array.isArray(action.payload.list)
-          ? action.payload.list
-          : [];
-        state.latest.meta = action.payload.meta || null;
-      })
-      .addCase(fetchLatestBooks.rejected, (state, action) => {
-        state.latest.loading = false;
-        state.latest.error = action.payload || action.error.message;
-        state.latest.items = [];
-      });
+    setCatalogPage: (s, a) => {
+      s.catalog.lastQuery.params.page = a.payload;
+    },
+    setCatalogQuery: (s, a) => {
+      s.catalog.lastQuery.params.q = a.payload;
+    },
+    setCatalogLimit: (s, a) => {
+      s.catalog.lastQuery.params.limit = a.payload;
+      s.catalog.pagination.limit = a.payload;
+    },
 
-    // popular
-    builder
-      .addCase(fetchPopularBooks.pending, (state) => {
-        state.popular.loading = true;
-        state.popular.error = "";
-      })
-      .addCase(fetchPopularBooks.fulfilled, (state, action) => {
-        state.popular.loading = false;
-        state.popular.items = Array.isArray(action.payload.list)
-          ? action.payload.list
-          : [];
-        state.popular.meta = action.payload.meta || null;
-      })
-      .addCase(fetchPopularBooks.rejected, (state, action) => {
-        state.popular.loading = false;
-        state.popular.error = action.payload || action.error.message;
-        state.popular.items = [];
-      });
+    resetCatalog: (s) => {
+      const limit = s.catalog.pagination?.limit || DEFAULT_LIMIT;
 
-    // activeBook
-    builder
-      .addCase(fetchActiveBook.pending, (state) => {
-        state.activeBook.loading = true;
-        state.activeBook.error = "";
-      })
-      .addCase(fetchActiveBook.fulfilled, (state, action) => {
-        state.activeBook.loading = false;
-        state.activeBook.item = action.payload || null;
-      })
-      .addCase(fetchActiveBook.rejected, (state, action) => {
-        state.activeBook.loading = false;
-        state.activeBook.error = action.payload || action.error.message;
-        state.activeBook.item = null;
-      });
+      s.catalog.items = [];
+      s.catalog.loading = false;
+      s.catalog.error = null;
+      s.catalog.pagination = { total: 0, page: 1, limit, pages: 0 };
+      s.catalog.lastQuery = {
+        mode: "public",
+        params: {
+          q: "",
+          page: 1,
+          limit,
+          sortBy: "createdAt",
+          sortOrder: "desc",
+        },
+      };
+    },
 
-    // admin
-    builder
-      .addCase(fetchAdminBooks.pending, (state) => {
-        state.admin.loading = true;
-        state.admin.error = "";
-      })
-      .addCase(fetchAdminBooks.fulfilled, (state, action) => {
-        state.admin.loading = false;
-        state.admin.items = Array.isArray(action.payload.list)
-          ? action.payload.list
-          : [];
-        state.admin.meta = action.payload.meta || null;
-        state.admin.q = action.payload.q;
-        state.admin.page = action.payload.page;
-        state.admin.limit = action.payload.limit;
-      })
-      .addCase(fetchAdminBooks.rejected, (state, action) => {
-        state.admin.loading = false;
-        state.admin.error = action.payload || action.error.message;
-        state.admin.items = [];
-      });
+    // Used by navbar when clicking "Books"
+    resetCatalogInNavbar: (s) => {
+      const limit = s.catalog.pagination?.limit || DEFAULT_LIMIT;
+
+      s.catalog.items = [];
+      s.catalog.loading = false;
+      s.catalog.error = null;
+      s.catalog.pagination = { total: 0, page: 1, limit, pages: 0 };
+      s.catalog.lastQuery = {
+        mode: "public",
+        params: {
+          q: "",
+          page: 1,
+          limit,
+          sortBy: "createdAt",
+          sortOrder: "desc",
+        },
+      };
+    },
+
+    // -----------------------------
+    // POPULAR (Homepage)
+    // -----------------------------
+    setPopularLoading: (s, a) => {
+      s.popular.loading = a.payload;
+    },
+    setPopularError: (s, a) => {
+      s.popular.error = a.payload;
+    },
+    setPopularBooks: (s, a) => {
+      s.popular.items = a.payload;
+    },
+
+    // -----------------------------
+    // LATEST (Homepage)
+    // -----------------------------
+    setLatestLoading: (s, a) => {
+      s.latest.loading = a.payload;
+    },
+    setLatestError: (s, a) => {
+      s.latest.error = a.payload;
+    },
+    setLatestBooks: (s, a) => {
+      s.latest.items = a.payload;
+    },
   },
 });
 
 export const {
-  setCatalogQuery,
+  // catalog
+  setCatalogLoading,
+  setCatalogError,
+  setCatalogSearchResult,
   setCatalogPage,
-  clearActiveBook,
+  setCatalogQuery,
+  setCatalogLimit,
   resetCatalog,
-  resetCatInNavBar,
+  resetCatalogInNavbar,
+
+  // homepage
+  setPopularLoading,
+  setPopularError,
+  setPopularBooks,
+  setLatestLoading,
+  setLatestError,
+  setLatestBooks,
 } = bookSlice.actions;
+
 export default bookSlice.reducer;

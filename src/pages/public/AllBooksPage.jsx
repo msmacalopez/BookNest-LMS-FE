@@ -4,44 +4,45 @@ import BookCard2 from "../../components/BookCard2";
 //integration - redux
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchCatalogBooks,
   resetCatalog,
   setCatalogPage,
   setCatalogQuery,
 } from "../../features/book/bookSlice";
+import { fetchPublicBooksAction } from "../../features/book/bookAction";
 
 export default function AllBooksPage() {
   const dispatch = useDispatch();
-  const { items, loading, error, q, page, limit } = useSelector(
+
+  const { items, loading, error, lastQuery } = useSelector(
     (state) => state.bookStore.catalog
   );
 
-  const [searchInput, setSearchInput] = useState("");
+  const { q = "", page = 1, limit = 10 } = lastQuery?.params || {};
 
-  // ✅ prevent double-run reset in React StrictMode dev
-  const didInit = useRef(false);
+  // local input (typing) separate from committed query (q)
+  const [searchInput, setSearchInput] = useState(q || "");
 
-  // Fetch ONLY once when page is entered
+  // 1) When entering page: reset once (no fetch here)
   useEffect(() => {
-    if (didInit.current) return;
-    didInit.current = true;
-    //when entering the page, clear previous search:
-    dispatch(resetCatalog());
-    //load page 1 without any input
-    dispatch(fetchCatalogBooks({ q: "", page: 1, limit }));
-    setSearchInput("");
-  }, [dispatch, limit]);
+    dispatch(resetCatalog()); // should set q="", page=1, etc.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
-  // Fetch whenever committed query/page changes
+  // 2) Single source of truth for fetching
   useEffect(() => {
-    dispatch(fetchCatalogBooks({ q, page, limit }));
+    dispatch(fetchPublicBooksAction({ q, page, limit }));
   }, [dispatch, q, page, limit]);
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
     dispatch(setCatalogPage(1));
-    dispatch(setCatalogQuery(searchInput));
-    // useEffect runs cause q/page changed
+    dispatch(setCatalogQuery(searchInput.trim()));
+  };
+
+  const handleClear = () => {
+    setSearchInput("");
+    dispatch(setCatalogPage(1));
+    dispatch(setCatalogQuery(""));
   };
 
   return (
@@ -49,13 +50,10 @@ export default function AllBooksPage() {
       <h2 className="text-primary text-4xl font-bold mb-8">
         Books In Catalogue...
       </h2>
+
       {/* Search Input */}
       <form onSubmit={handleOnSubmit} className="w-full flex justify-center">
-        <label
-          className="input rounded-full md:w-200 focus-within:border-gray-100
-    focus-within:ring-0
-    focus-within:shadow-none mb-8"
-        >
+        <label className="input rounded-full md:w-200 focus-within:border-gray-100 focus-within:ring-0 focus-within:shadow-none mb-8 flex items-center gap-2">
           <svg
             className="h-[1em] opacity-50"
             xmlns="http://www.w3.org/2000/svg"
@@ -72,22 +70,30 @@ export default function AllBooksPage() {
               <path d="m21 21-4.3-4.3"></path>
             </g>
           </svg>
+
           <input
             type="search"
             placeholder="Search books by Title, Author, etc...)"
             value={searchInput}
-            // next, when input empty, reset the search
             onChange={(e) => {
               const value = e.target.value;
               setSearchInput(value);
 
-              if (value === "") {
-                console.log("clear");
-                dispatch(setCatalogPage(1));
-                dispatch(setCatalogQuery(""));
-              }
+              // if user clears input, immediately reset search
+              if (value === "") handleClear();
             }}
           />
+
+          {/* optional clear button (better UX than relying on browser X) */}
+          {searchInput && (
+            <button
+              type="button"
+              className="btn btn-ghost btn-xs"
+              onClick={handleClear}
+            >
+              Clear
+            </button>
+          )}
         </label>
       </form>
 
@@ -105,14 +111,17 @@ export default function AllBooksPage() {
         <button
           className="btn"
           onClick={() => dispatch(setCatalogPage(Math.max(1, page - 1)))}
-          disabled={page <= 1}
+          disabled={page <= 1 || loading}
         >
           Prev
         </button>
+
         <span className="pt-2">Page {page}</span>
+
         <button
           className="btn"
           onClick={() => dispatch(setCatalogPage(page + 1))}
+          disabled={loading /* optionally disable if last page known */}
         >
           Next
         </button>

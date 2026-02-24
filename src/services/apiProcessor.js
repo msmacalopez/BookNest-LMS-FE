@@ -6,6 +6,7 @@ export const apiProcessor = async ({
   method,
   url,
   data,
+  params,
   isPrivate,
   isRefreshToken,
   contentType = "application/json",
@@ -30,6 +31,7 @@ export const apiProcessor = async ({
       method,
       url: apiUrl,
       data,
+      params,
       headers, //token + content type
     });
 
@@ -45,7 +47,7 @@ export const apiProcessor = async ({
       console.log("Making api call to renew the token");
       const tokenRenewed = await fetchNewAccessJWT();
       if (tokenRenewed) {
-        return apiProcessor({ method, url, data, isPrivate });
+        return apiProcessor({ method, url, data, params, isPrivate });
       }
     }
     return { status: "error", message };

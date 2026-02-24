@@ -21,6 +21,13 @@ export const fetchAllActiveBooks = async ({
     isPrivate: false,
   });
 };
+export const searchPublicBooksAPI = (params) =>
+  apiProcessor({
+    method: "get",
+    url: "/books/searchbooks",
+    params,
+    isPrivate: false,
+  });
 
 export const fetchActiveBookById = async (id) =>
   apiProcessor({
@@ -46,6 +53,13 @@ export const fetchAdminAllBooks = async ({
     isPrivate: true,
   });
 };
+export const searchAllBooksAPI = (params) =>
+  apiProcessor({
+    method: "get",
+    url: "/books/searchallbooks",
+    params,
+    isPrivate: true,
+  });
 
 //admin ->private (search in unactive books as well)
 export const fetchBookByIdAdmin = async (bookId) =>

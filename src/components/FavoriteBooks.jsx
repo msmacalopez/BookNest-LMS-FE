@@ -4,9 +4,9 @@ import BookCard from "./BookCard";
 //from redux
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchPopularBooks,
-  fetchLatestBooks,
-} from "../features/book/bookSlice";
+  fetchPopularBooksAction,
+  fetchLatestBooksAction,
+} from "../features/book/bookAction";
 
 export default function FavoriteBooks() {
   const dispatch = useDispatch();
@@ -15,11 +15,11 @@ export default function FavoriteBooks() {
 
   useEffect(() => {
     if (!popular.items.length) {
-      dispatch(fetchPopularBooks({ limit: 3 }));
+      dispatch(fetchPopularBooksAction({ limit: 3 }));
     }
 
     if (!latest.items.length) {
-      dispatch(fetchLatestBooks({ limit: 3 }));
+      dispatch(fetchLatestBooksAction({ limit: 3 }));
     }
   }, [dispatch]);
 
