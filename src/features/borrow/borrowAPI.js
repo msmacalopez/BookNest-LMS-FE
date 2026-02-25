@@ -8,10 +8,10 @@ export const createMyBorrow = async (bookId) => {
   });
 };
 
-export const fetchMyBorrows = async () => {
+export const fetchMyBorrows = ({ page = 1, limit = 10 } = {}) => {
   return apiProcessor({
     method: "get",
-    url: `/borrows/myborrows`,
+    url: `/borrows/myborrows?page=${page}&limit=${limit}`,
     isPrivate: true,
   });
 };

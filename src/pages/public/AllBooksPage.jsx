@@ -121,7 +121,7 @@ export default function AllBooksPage() {
         <button
           className="btn"
           onClick={() => dispatch(setCatalogPage(page + 1))}
-          disabled={loading /* optionally disable if last page known */}
+          disabled={loading}
         >
           Next
         </button>

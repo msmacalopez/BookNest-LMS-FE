@@ -2,7 +2,9 @@ import {
   reviewPending,
   reviewFail,
   createReviewSuccess,
-  myReviewsSuccess,
+  setMyReviewsLoading,
+  setMyReviewsError,
+  setMyReviewsResult,
 } from "./reviewSlice";
 
 import { createReview, fetchMyReviews } from "./reviewAPI";
@@ -35,21 +37,31 @@ export const createReviewAction =
     }
   };
 
-export const fetchMyReviewsAction = () => async (dispatch) => {
-  try {
-    dispatch(reviewPending());
+export const fetchMyReviewsAction =
+  ({ page = 1, limit = 10 } = {}) =>
+  async (dispatch) => {
+    try {
+      dispatch(setMyReviewsLoading(true));
+      dispatch(setMyReviewsError(null));
 
-    const res = await fetchMyReviews();
+      const res = await fetchMyReviews({ page, limit });
 
-    if (res?.status !== "success") {
-      dispatch(reviewFail(res?.message || "Failed to fetch my reviews"));
+      if (res?.status !== "success") {
+        dispatch(
+          setMyReviewsError(res?.message || "Failed to fetch my reviews")
+        );
+        dispatch(setMyReviewsLoading(false));
+        return null;
+      }
+
+      const { items, pagination, params } = res.data || {};
+      dispatch(setMyReviewsResult({ items, pagination, params }));
+
+      dispatch(setMyReviewsLoading(false));
+      return res;
+    } catch (e) {
+      dispatch(setMyReviewsError(e?.message || "Failed to fetch my reviews"));
+      dispatch(setMyReviewsLoading(false));
       return null;
     }
-
-    dispatch(myReviewsSuccess(res));
-    return res;
-  } catch (e) {
-    dispatch(reviewFail(e?.message || "Failed to fetch my reviews"));
-    return null;
-  }
-};
+  };

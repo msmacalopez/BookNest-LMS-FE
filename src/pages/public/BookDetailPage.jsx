@@ -22,7 +22,9 @@ export default function BookDetailPage() {
   const [book, setBook] = useState(null);
 
   const { user } = useSelector((state) => state.authStore);
-  const { myBorrows } = useSelector((state) => state?.borrowStore || []);
+  //myBorrows = { items: [], pagination:..., lastQuery:... }
+  const myBorrows =
+    useSelector((state) => state.borrowStore.myBorrows?.items) || [];
   const borrowLoading = useSelector((state) => state?.borrow?.loading);
 
   useEffect(() => {

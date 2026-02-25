@@ -3,6 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
+import {
+  resetMyBorrows,
+  setMyBorrowsPage,
+} from "../../features/borrow/borrowSlice";
 import { fetchMyBorrowsAction } from "../../features/borrow/borrowAction";
 import { createReviewAction } from "../../features/review/reviewAction";
 
@@ -10,11 +14,15 @@ export default function MyBorrowsBooksPage() {
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.authStore);
-  const {
-    myBorrows = [],
-    loading: borrowsLoading,
-    error: borrowsError,
-  } = useSelector((state) => state.borrowStore);
+
+  //catalog style
+  const { items, loading, error, lastQuery, pagination } = useSelector(
+    (state) => state.borrowStore.myBorrows
+  );
+
+  const { pages = 1 } = pagination || {};
+
+  const { page = 1, limit = 10 } = lastQuery?.params || {};
 
   const { loading: reviewLoading, error: reviewError } = useSelector(
     (state) => state.reviewStore
@@ -27,11 +35,18 @@ export default function MyBorrowsBooksPage() {
   const [title, setTitle] = useState("");
   const [comment, setComment] = useState("");
 
+  // 1) When entering page: reset once (no fetch here) — same as AllBooks
+  useEffect(() => {
+    dispatch(resetMyBorrows());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
+
+  // 2) Single source of truth for fetching — same as AllBooks
   useEffect(() => {
     if (user?._id) {
-      dispatch(fetchMyBorrowsAction());
+      dispatch(fetchMyBorrowsAction({ page, limit }));
     }
-  }, [user?._id, dispatch]);
+  }, [dispatch, user?._id, page, limit]);
 
   const formatDate = (d) => {
     if (!d) return "-";
@@ -41,7 +56,7 @@ export default function MyBorrowsBooksPage() {
   };
 
   const rows = useMemo(() => {
-    return myBorrows.map((b) => {
+    return (items || []).map((b) => {
       const book = b.bookId && typeof b.bookId === "object" ? b.bookId : {};
 
       const cover =
@@ -61,7 +76,7 @@ export default function MyBorrowsBooksPage() {
         status: b.status,
       };
     });
-  }, [myBorrows]);
+  }, [items]);
 
   const openReviewModal = (borrowRow) => {
     setSelectedBorrow(borrowRow);
@@ -91,6 +106,8 @@ export default function MyBorrowsBooksPage() {
     if (res?.status === "success") {
       toast.success("Review submitted and pending approval");
       closeModal();
+      // after review created, borrows will refresh via your createReviewAction -> fetchMyBorrowsAction
+      // BUT: now fetchMyBorrowsAction expects {page,limit}, so make sure your action passes it (see note below)
     } else {
       toast.error(res?.message || "Failed to submit review");
     }
@@ -132,25 +149,25 @@ export default function MyBorrowsBooksPage() {
       <h1 className="text-primary text-2xl font-bold mb-3">My Borrows</h1>
       <hr />
 
-      {borrowsLoading && (
+      {loading && (
         <div className="flex justify-center mt-6">
           <span className="loading loading-spinner loading-lg" />
         </div>
       )}
 
-      {!borrowsLoading && borrowsError && (
+      {!loading && error && (
         <div className="alert alert-error mt-4">
-          <span>{borrowsError}</span>
+          <span>{error}</span>
         </div>
       )}
 
-      {!borrowsLoading && !borrowsError && rows.length === 0 && (
+      {!loading && !error && rows.length === 0 && (
         <div className="alert alert-info mt-4">
           <span>No borrows yet.</span>
         </div>
       )}
 
-      {!borrowsLoading && !borrowsError && rows.length > 0 && (
+      {!loading && !error && rows.length > 0 && (
         <div className="overflow-x-auto mt-4">
           <table className="table">
             <thead>
@@ -208,6 +225,27 @@ export default function MyBorrowsBooksPage() {
           </table>
         </div>
       )}
+
+      {/* Pagination*/}
+      <div className="flex justify-center gap-3 mt-8">
+        <button
+          className="btn"
+          onClick={() => dispatch(setMyBorrowsPage(Math.max(1, page - 1)))}
+          disabled={page <= 1 || loading}
+        >
+          Prev
+        </button>
+
+        <span className="pt-2">Page {page}</span>
+
+        <button
+          className="btn"
+          onClick={() => dispatch(setMyBorrowsPage(page + 1))}
+          disabled={loading || page >= pages}
+        >
+          Next
+        </button>
+      </div>
 
       {/* ---------- MODAL ---------- */}
       {isModalOpen && (
@@ -288,7 +326,6 @@ export default function MyBorrowsBooksPage() {
             </form>
           </div>
 
-          {/* click outside closes */}
           <div className="modal-backdrop" onClick={closeModal} />
         </div>
       )}

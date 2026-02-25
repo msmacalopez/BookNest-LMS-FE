@@ -2,7 +2,9 @@ import {
   borrowPending,
   borrowFail,
   borrowSuccess,
-  myBorrowsSuccess,
+  setMyBorrowsLoading,
+  setMyBorrowsError,
+  setMyBorrowsResult,
 } from "./borrowSlice";
 import { createMyBorrow, fetchMyBorrows } from "./borrowAPI";
 
@@ -25,20 +27,28 @@ export const createMyBorrowAction = (bookId) => async (dispatch) => {
   }
 };
 
-export const fetchMyBorrowsAction = () => async (dispatch) => {
-  try {
-    dispatch(borrowPending());
+export const fetchMyBorrowsAction =
+  ({ page, limit } = {}) =>
+  async (dispatch) => {
+    try {
+      dispatch(setMyBorrowsLoading(true));
+      dispatch(setMyBorrowsError(null));
 
-    const res = await fetchMyBorrows();
+      const res = await fetchMyBorrows({ page, limit });
 
-    if (res?.status !== "success") {
-      return dispatch(
-        borrowFail(res?.message || "Failed to load borrow history")
-      );
+      if (res?.status !== "success") {
+        dispatch(setMyBorrowsError(res?.message || "Failed to fetch borrows"));
+        dispatch(setMyBorrowsLoading(false));
+        return null;
+      }
+
+      const { items, pagination, params } = res.data || {};
+      dispatch(setMyBorrowsResult({ items, pagination, params }));
+      dispatch(setMyBorrowsLoading(false));
+      return res;
+    } catch (e) {
+      dispatch(setMyBorrowsError(e?.message || "Failed to fetch borrows"));
+      dispatch(setMyBorrowsLoading(false));
+      return null;
     }
-
-    dispatch(myBorrowsSuccess(res));
-  } catch (e) {
-    dispatch(borrowFail(e?.message || "Failed to load borrow history"));
-  }
-};
+  };

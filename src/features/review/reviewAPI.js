@@ -9,10 +9,10 @@ export const createReview = (borrowId, reviewData) => {
   });
 };
 
-export const fetchMyReviews = () => {
+export const fetchMyReviews = ({ page = 1, limit = 10 } = {}) => {
   return apiProcessor({
     method: "get",
-    url: `/reviews/myreviews`,
+    url: `/reviews/myreviews?page=${page}&limit=${limit}`,
     isPrivate: true,
   });
 };
