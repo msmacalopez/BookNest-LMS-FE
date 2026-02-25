@@ -71,7 +71,7 @@ export default function BookDetailPage() {
   //detect if this book is already borrowed by me
   const alreadyBorrowed = useMemo(() => {
     return myBorrows.some((b) => {
-      const borrowedBookId = b?.bookId?._id || b?.bookId;
+      const borrowedBookId = b?.bookId?._id || b?.bookId || b?._id;
       return (
         String(borrowedBookId) === String(bookId) && b?.status === "borrowed"
       );

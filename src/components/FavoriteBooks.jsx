@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import BookCard from "./BookCard";
+import BookCardHome from "./BookCardHome";
 
 //from redux
 import { useDispatch, useSelector } from "react-redux";
@@ -60,7 +60,7 @@ export default function FavoriteBooks() {
 
       <div className="flex flex-col gap-6 md:flex-row">
         {popular.items.map((book) => (
-          <BookCard key={book._id} book={book} barge="TOP" />
+          <BookCardHome key={book._id} book={book} barge="TOP" />
         ))}
       </div>
       {/* List of New Books */}
@@ -73,7 +73,7 @@ export default function FavoriteBooks() {
 
       <div className="flex flex-col gap-6 md:flex-row">
         {latest.items.map((book) => (
-          <BookCard key={book._id} book={book} barge="NEW" />
+          <BookCardHome key={book._id} book={book} barge="NEW" />
         ))}
       </div>
     </div>

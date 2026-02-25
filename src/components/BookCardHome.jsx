@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function BookCard({ book, badge }) {
+export default function BookCardHome({ book, badge }) {
   if (!book) return null;
 
   const { _id, title, description, genre, author } = book;
