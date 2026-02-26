@@ -1,7 +1,11 @@
+//bookAction.js
 import {
   searchPublicBooksAPI,
   searchAllBooksAPI,
   fetchActiveBookById,
+  addBookAdminAPI,
+  updateBookAdminAPI,
+  deleteBookAdminAPI,
   fetchBookByIdAdmin,
 } from "./bookAPI";
 
@@ -74,6 +78,36 @@ export const fetchAllBooksAction =
     }
   };
 
+//Public fetch a book by id (only active)
+export const fetchActiveBookByIdAction = (bookId) => async () => {
+  return await fetchActiveBookById(bookId);
+};
+
+//Admin fetch one book info (active + inactive)
+export const fetchBookByIdAdminAction = (bookId) => async () => {
+  return await fetchBookByIdAdmin(bookId);
+};
+
+// ADMIN create a book
+export const addBookAdminAction = (bookData) => async () => {
+  return await addBookAdminAPI(bookData);
+};
+
+// ADMIN update a book
+export const updateBookAdminAction = (bookId, bookData) => async () => {
+  return await updateBookAdminAPI(bookId, bookData);
+};
+
+//ADMIN update a book's status only (active/inactive)
+export const updateBookStatusAdminAction = (bookId, status) => async () => {
+  return await updateBookAdminAPI(bookId, { status });
+};
+
+// ADMIN delete a book
+export const deleteBookAdminAction = (bookId) => async () => {
+  return await deleteBookAdminAPI(bookId);
+};
+
 // POPULAR BOOKS
 export const fetchPopularBooksAction =
   ({ limit = 3 } = {}) =>
@@ -123,11 +157,3 @@ export const fetchLatestBooksAction =
       dispatch(setLatestLoading(false));
     }
   };
-
-export const fetchActiveBookByIdAction = (bookId) => async () => {
-  return await fetchActiveBookById(bookId);
-};
-
-export const fetchBookByIdAdminAction = (bookId) => async () => {
-  return await fetchBookByIdAdmin(bookId);
-};

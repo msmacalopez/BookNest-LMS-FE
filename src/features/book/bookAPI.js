@@ -1,3 +1,4 @@
+//bookAPI.js
 import { apiProcessor } from "../../services/apiProcessor";
 
 export const fetchAllActiveBooks = async ({
@@ -61,10 +62,36 @@ export const searchAllBooksAPI = (params) =>
     isPrivate: true,
   });
 
-//admin ->private (search in unactive books as well)
-export const fetchBookByIdAdmin = async (bookId) =>
+// ADMIN create a book
+export const addBookAdminAPI = (data) =>
+  apiProcessor({
+    method: "post",
+    url: "/books/addbook",
+    data,
+    isPrivate: true,
+  });
+
+// ADMIN read one (active+inactive)
+export const fetchBookByIdAdmin = (bookId) =>
   apiProcessor({
     method: "get",
-    url: `/books/books/${bookId}`,
+    url: `/books/allbooks/${bookId}`,
+    isPrivate: true,
+  });
+
+// ADMIN update a book
+export const updateBookAdminAPI = (bookId, data) =>
+  apiProcessor({
+    method: "patch",
+    url: `/books/updatebook/${bookId}`,
+    data,
+    isPrivate: true,
+  });
+
+// ADMIN delete a book
+export const deleteBookAdminAPI = (bookId) =>
+  apiProcessor({
+    method: "delete",
+    url: `/books/deletebook/${bookId}`,
     isPrivate: true,
   });

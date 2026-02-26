@@ -69,7 +69,14 @@ function App() {
               <Route path="borrows" element={<BorrowManagementPage />} />
               <Route path="reviews" element={<ReviewManagementPage />} />
               <Route path="members" element={<MembersManagementPage />} />
-              <Route path="editbook/:id" element={<AddEditBookPage />} />
+              <Route
+                path="/dashboard/books/new"
+                element={<AddEditBookPage />}
+              />
+              <Route
+                path="/dashboard/books/:id/edit"
+                element={<AddEditBookPage />}
+              />
               <Route
                 path="borrows/resultborrows"
                 element={<BorrowsResultOfSearch />}
