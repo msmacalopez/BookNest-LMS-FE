@@ -162,7 +162,7 @@ export default function MyBorrowsBooksPage() {
       )}
 
       {!loading && !error && rows.length === 0 && (
-        <div className="alert alert-info mt-4">
+        <div className="alert alert-soft mt-4">
           <span>No borrows yet.</span>
         </div>
       )}

@@ -1,3 +1,5 @@
+//authAPI.js
+
 // create a function loginUser that takes email and password as parameters
 // use apiProcessor to make a post request to /auth/login with email and password as data
 // return the response from apiProcessor

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function BookCard2({ book }) {
+export default function BookCardAllBooks({ book }) {
   if (!book) return null;
 
   const { _id, title, genre, author, description } = book;
@@ -19,7 +19,7 @@ export default function BookCard2({ book }) {
         <figure className="min-w-40">
           <img src={coverImageUrl} alt={`${title || "Book"} Cover`} />
         </figure>
-        <div className="card-body">
+        <div className="card-body p-3">
           <h2 className="card-title">{title || "N/A"}</h2>
           <small>
             {genre || "Unknown Genre"} {author || "N/A"}

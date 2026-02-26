@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import BookCard2 from "../../components/BookCard2";
+import BookCardAllBooks from "../../components/BookCardAllBooks";
 
 //integration - redux
 import { useDispatch, useSelector } from "react-redux";
@@ -102,7 +102,7 @@ export default function AllBooksPage() {
 
       <div className="flex flex-col gap-6 md:flex-row md:flex-wrap items-center justify-center">
         {items.map((book) => (
-          <BookCard2 key={book._id} book={book} />
+          <BookCardAllBooks key={book._id} book={book} />
         ))}
       </div>
 

@@ -241,8 +241,8 @@ export default function BookDetailPage() {
 
             {/* Borrowed badge (if already borrowed) */}
             {derived.isEbook && alreadyBorrowed && (
-              <div className="badge badge-primary badge-lg min-h-10">
-                Borrowed
+              <div className="badge badge-error badge-lg min-h-10">
+                Already Borrowed
               </div>
             )}
 

@@ -73,7 +73,7 @@ export default function MyReviews() {
       )}
 
       {!loading && !error && (items || []).length === 0 && (
-        <div className="alert alert-info mt-4">
+        <div className="alert alert-soft mt-4">
           <span>No approved reviews yet.</span>
         </div>
       )}

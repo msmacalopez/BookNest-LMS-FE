@@ -1,3 +1,4 @@
+//authAction.js
 import { toast } from "react-toastify";
 import { setUser, logOut as logoutSlice, setAuthReady } from "./authSlice";
 import {
@@ -14,12 +15,14 @@ export const loginUserAction = (form) => async (dispatch) => {
     toast.promise(pending, { pending: "Logging in..." });
 
     const res = await pending;
-    console.log("LOGIN RES:", res);
+    // TODO - remove after testing
+    // console.log("LOGIN RES:", res);
 
     // Expecting: { status, message, tokens: { accessJWT, refreshJWT } }
     // If your backend is different, adjust here.
     const { status, message, tokens, user } = res || {};
-    console.log("status:", status, "tokens:", tokens, "user:", user);
+    // TODO - remove after testing
+    // console.log("status:", status, "tokens:", tokens, "user:", user);
 
     if (status) toast[status](message || "Login response received");
 
@@ -28,7 +31,8 @@ export const loginUserAction = (form) => async (dispatch) => {
       const accessJWT = tokens?.accessToken;
       const refreshJWT = tokens?.renewToken;
 
-      console.log("accessJWT:", accessJWT, "refreshJWT:", refreshJWT);
+      //TODO - remove after testing
+      // console.log("accessJWT:", accessJWT, "refreshJWT:", refreshJWT);
 
       if (accessJWT) sessionStorage.setItem("accessJWT", accessJWT);
       if (refreshJWT) localStorage.setItem("refreshJWT", refreshJWT);
