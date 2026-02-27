@@ -22,6 +22,16 @@ const initialState = {
       },
     },
   },
+  //admin fetch
+  allBorrows: {
+    items: [],
+    loading: false,
+    error: null,
+    pagination: { total: 0, page: 1, limit: 10, pages: 0 },
+    lastQuery: {
+      params: { q: "", status: "", page: 1, limit: 10 },
+    },
+  },
 };
 
 const borrowSlice = createSlice({
@@ -29,7 +39,7 @@ const borrowSlice = createSlice({
   initialState,
   reducers: {
     // -----------------------------
-    // General (create borrow etc.)
+    // General (create borrow,...)
     // -----------------------------
     borrowPending: (state) => {
       state.loading = true;
@@ -100,6 +110,45 @@ const borrowSlice = createSlice({
       state.error = "";
       state.successMsg = "";
     },
+
+    // -----------------------------
+    // Admin All Borrows (catalog style)
+    // -----------------------------
+    setAllBorrowsLoading: (state, { payload }) => {
+      state.allBorrows.loading = payload;
+    },
+    setAllBorrowsError: (state, { payload }) => {
+      state.allBorrows.error = payload;
+    },
+    setAllBorrowsResult: (state, { payload }) => {
+      const { items, pagination, params } = payload || {};
+      state.allBorrows.items = items || [];
+      state.allBorrows.pagination = pagination ?? state.allBorrows.pagination;
+      state.allBorrows.lastQuery = {
+        params: params ?? state.allBorrows.lastQuery.params,
+      };
+    },
+    setAllBorrowsPage: (state, { payload }) => {
+      state.allBorrows.lastQuery.params.page = payload;
+    },
+    setAllBorrowsQuery: (state, { payload }) => {
+      // payload: { q, status }
+      state.allBorrows.lastQuery.params.q =
+        payload?.q ?? state.allBorrows.lastQuery.params.q;
+      state.allBorrows.lastQuery.params.status =
+        payload?.status ?? state.allBorrows.lastQuery.params.status;
+      state.allBorrows.lastQuery.params.page = 1; // ✅ reset to first page when searching/filtering
+    },
+    resetAllBorrows: (state) => {
+      const limit = state.allBorrows.pagination?.limit || 10;
+      state.allBorrows.items = [];
+      state.allBorrows.loading = false;
+      state.allBorrows.error = null;
+      state.allBorrows.pagination = { total: 0, page: 1, limit, pages: 0 };
+      state.allBorrows.lastQuery = {
+        params: { q: "", status: "", page: 1, limit },
+      };
+    },
   },
 });
 
@@ -110,13 +159,21 @@ export const {
   borrowSuccess,
   clearBorrowStatus,
 
-  // new catalog-style
+  //my borrows - catalog-style
   setMyBorrowsLoading,
   setMyBorrowsError,
   setMyBorrowsResult,
   setMyBorrowsPage,
   setMyBorrowsLimit,
   resetMyBorrows,
+
+  // admin all borrows
+  setAllBorrowsLoading,
+  setAllBorrowsError,
+  setAllBorrowsResult,
+  setAllBorrowsPage,
+  setAllBorrowsQuery,
+  resetAllBorrows,
 } = borrowSlice.actions;
 
 export default borrowSlice.reducer;

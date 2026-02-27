@@ -359,29 +359,33 @@ export default function BookManagementPage() {
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-center mt-3">
-        <div className="join grid grid-cols-2 mx-auto">
-          <button
-            className="join-item btn btn-outline"
-            onClick={goPrev}
-            disabled={page <= 1 || loading}
-          >
-            Previous page
-          </button>
-          <button
-            className="join-item btn btn-outline"
-            onClick={goNext}
-            disabled={page >= pages || loading}
-          >
-            Next
-          </button>
-        </div>
+      <div className="flex justify-center gap-3 mt-8">
+        <button
+          className="btn"
+          onClick={goPrev}
+          disabled={page <= 1 || loading}
+        >
+          Prev
+        </button>
+
+        <span className="pt-2 opacity-70">
+          Page {page}
+          {/* Page {page} of {pages} */}
+        </span>
+
+        <button
+          className="btn"
+          onClick={goNext}
+          disabled={page >= pages || loading}
+        >
+          Next
+        </button>
       </div>
 
       {/* Small page indicator */}
-      <p className="text-center mt-2 opacity-70 text-sm">
+      {/* <p className="text-center mt-2 opacity-70 text-sm">
         Page {page} of {pages}
-      </p>
+      </p> */}
     </div>
   );
 }

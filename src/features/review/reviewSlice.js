@@ -23,6 +23,14 @@ const initialState = {
     loading: false,
     error: null,
   },
+  // for admin search
+  allReviews: {
+    items: [],
+    loading: false,
+    error: null,
+    pagination: { total: 0, page: 1, limit: 10, pages: 0 },
+    lastQuery: { params: { q: "", status: "", page: 1, limit: 10 } },
+  },
 };
 
 const reviewSlice = createSlice({
@@ -77,6 +85,42 @@ const reviewSlice = createSlice({
       state.error = "";
       state.successMsg = "";
     },
+
+    // for all reviews (admin) and search
+    setAllReviewsLoading: (state, { payload }) => {
+      state.allReviews.loading = payload;
+    },
+    setAllReviewsError: (state, { payload }) => {
+      state.allReviews.error = payload;
+    },
+    setAllReviewsResult: (state, { payload }) => {
+      const { items, pagination, params } = payload || {};
+      state.allReviews.items = items || [];
+      state.allReviews.pagination = pagination ?? state.allReviews.pagination;
+      state.allReviews.lastQuery = {
+        params: params ?? state.allReviews.lastQuery.params,
+      };
+    },
+    setAllReviewsPage: (state, { payload }) => {
+      state.allReviews.lastQuery.params.page = payload;
+    },
+    setAllReviewsQuery: (state, { payload }) => {
+      state.allReviews.lastQuery.params.q =
+        payload?.q ?? state.allReviews.lastQuery.params.q;
+      state.allReviews.lastQuery.params.status =
+        payload?.status ?? state.allReviews.lastQuery.params.status;
+      state.allReviews.lastQuery.params.page = 1;
+    },
+    resetAllReviews: (state) => {
+      const limit = state.allReviews.pagination?.limit || 10;
+      state.allReviews.items = [];
+      state.allReviews.loading = false;
+      state.allReviews.error = null;
+      state.allReviews.pagination = { total: 0, page: 1, limit, pages: 0 };
+      state.allReviews.lastQuery = {
+        params: { q: "", status: "", page: 1, limit },
+      };
+    },
   },
 });
 
@@ -91,6 +135,13 @@ export const {
   setMyReviewsResult,
   setMyReviewsPage,
   resetMyReviews,
+
+  setAllReviewsLoading,
+  setAllReviewsError,
+  setAllReviewsResult,
+  setAllReviewsPage,
+  setAllReviewsQuery,
+  resetAllReviews,
 } = reviewSlice.actions;
 
 export default reviewSlice.reducer;

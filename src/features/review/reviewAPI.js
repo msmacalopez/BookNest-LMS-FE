@@ -24,3 +24,26 @@ export const fetchReviewsByBook = (bookId) => {
     url: `/reviews/book/${bookId}`,
   });
 };
+
+export const fetchAllReviews = ({
+  q = "",
+  status = "",
+  page = 1,
+  limit = 10,
+} = {}) => {
+  return apiProcessor({
+    method: "get",
+    url: `/reviews/allreviews`,
+    params: { q, status, page, limit },
+    isPrivate: true,
+  });
+};
+
+export const adminUpdateReviewStatus = (reviewId, status) => {
+  return apiProcessor({
+    method: "patch",
+    url: `/reviews/updatereview/${reviewId}`,
+    data: { status },
+    isPrivate: true,
+  });
+};

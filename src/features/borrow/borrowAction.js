@@ -5,8 +5,16 @@ import {
   setMyBorrowsLoading,
   setMyBorrowsError,
   setMyBorrowsResult,
+  setAllBorrowsLoading,
+  setAllBorrowsError,
+  setAllBorrowsResult,
 } from "./borrowSlice";
-import { createMyBorrow, fetchMyBorrows } from "./borrowAPI";
+import {
+  createMyBorrow,
+  fetchMyBorrows,
+  fetchAllBorrows,
+  adminReturnBook,
+} from "./borrowAPI";
 
 export const createMyBorrowAction = (bookId) => async (dispatch) => {
   try {
@@ -52,3 +60,42 @@ export const fetchMyBorrowsAction =
       return null;
     }
   };
+
+export const fetchAllBorrowsAction =
+  (params = {}) =>
+  async (dispatch) => {
+    try {
+      dispatch(setAllBorrowsLoading(true));
+      dispatch(setAllBorrowsError(null));
+
+      const res = await fetchAllBorrows(params);
+
+      if (res?.status !== "success") {
+        dispatch(
+          setAllBorrowsError(res?.message || "Failed to fetch all borrows")
+        );
+        dispatch(setAllBorrowsLoading(false));
+        return null;
+      }
+
+      const { items, pagination, params: returnedParams } = res.data || {};
+      dispatch(
+        setAllBorrowsResult({ items, pagination, params: returnedParams })
+      );
+      dispatch(setAllBorrowsLoading(false));
+      return res;
+    } catch (e) {
+      dispatch(setAllBorrowsError(e?.message || "Failed to fetch all borrows"));
+      dispatch(setAllBorrowsLoading(false));
+      return null;
+    }
+  };
+
+export const adminReturnBookAction = (borrowId) => async (dispatch) => {
+  try {
+    const res = await adminReturnBook(borrowId);
+    return res;
+  } catch (e) {
+    return { status: "error", message: e?.message || "Return failed" };
+  }
+};

@@ -16,11 +16,17 @@ export const fetchMyBorrows = ({ page = 1, limit = 10 } = {}) => {
   });
 };
 
-// (Optional for admin pages later)
-export const fetchAllBorrows = async () => {
+// admin fetch with query params: q (search by book title or member name), status (borrow status), page, limit
+export const fetchAllBorrows = ({
+  q = "",
+  status = "",
+  page = 1,
+  limit = 10,
+} = {}) => {
   return apiProcessor({
     method: "get",
     url: `/borrows/allborrows`,
+    params: { q, status, page, limit },
     isPrivate: true,
   });
 };
