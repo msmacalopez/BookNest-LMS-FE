@@ -261,6 +261,12 @@ export default function ProfilePage() {
                     className={`badge ${
                       safeUser.status === "active"
                         ? "badge-success"
+                        : safeUser.status === "inactive"
+                        ? "badge-neutral"
+                        : safeUser.status === "suspended"
+                        ? "badge-warning"
+                        : safeUser.status === "deactivated"
+                        ? "badge-error"
                         : "badge-ghost"
                     }`}
                   >

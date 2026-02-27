@@ -1,3 +1,4 @@
+// ManageAdmins.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +18,9 @@ import {
 
 export default function ManageAdmins() {
   const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.authStore || {});
+  const myId = user?._id;
 
   const { items, loading, error, pagination, lastQuery } = useSelector(
     (state) => state.userStore.adminUsers
@@ -54,10 +58,18 @@ export default function ManageAdmins() {
     if (error) toast.error(error);
   }, [error]);
 
+  const isSelf = (id) => myId && id && String(myId) === String(id);
+  const isProtected = (u) => isSelf(u?._id) || u?.role === "superadmin"; //protect self + any superadmin
+
   const allChecked = useMemo(() => {
     if (!items?.length) return false;
-    return items.every((u) => selectedIds.has(u._id));
-  }, [items, selectedIds]);
+
+    const eligible = items.filter((u) => !isProtected(u));
+    if (!eligible.length) return false;
+
+    return eligible.every((u) => selectedIds.has(u._id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items, selectedIds, myId]);
 
   const toggleOne = (id) => {
     setSelectedIds((prev) => {
@@ -71,8 +83,11 @@ export default function ManageAdmins() {
   const toggleAll = () => {
     setSelectedIds((prev) => {
       if (allChecked) return new Set();
+
       const next = new Set(prev);
-      items.forEach((u) => next.add(u._id));
+      (items || []).forEach((u) => {
+        if (!isProtected(u)) next.add(u._id);
+      });
       return next;
     });
   };
@@ -105,11 +120,16 @@ export default function ManageAdmins() {
     );
   };
 
-  const handleDeleteOne = async (id) => {
+  const handleDeleteOne = async (u) => {
+    if (isProtected(u)) {
+      toast.info("This user is protected and cannot be deleted here.");
+      return;
+    }
+
     const ok = window.confirm("Delete this user? This cannot be undone.");
     if (!ok) return;
 
-    const res = await dispatch(deleteUserSuperAdminAction(id));
+    const res = await dispatch(deleteUserSuperAdminAction(u._id));
     if (res?.status === "success") {
       toast.success(res?.message || "User deleted");
       refresh();
@@ -163,7 +183,12 @@ export default function ManageAdmins() {
   };
 
   const RoleBadge = ({ value }) => {
-    const cls = value === "admin" ? "badge-info" : "badge-soft";
+    const cls =
+      value === "admin"
+        ? "badge-info"
+        : value === "member"
+        ? "badge-info badge-outline"
+        : "badge-neutral";
     return <span className={`badge ${cls}`}>{value}</span>;
   };
 
@@ -252,6 +277,7 @@ export default function ManageAdmins() {
               <option value="">All Roles</option>
               <option value="member">Member</option>
               <option value="admin">Librarian</option>
+              <option value="superadmin">Super Admin</option>
             </select>
 
             <select
@@ -299,18 +325,19 @@ export default function ManageAdmins() {
                     checked={allChecked}
                     onChange={toggleAll}
                     disabled={!items?.length}
+                    title="Select all eligible users (excludes yourself and superadmins)"
                   />
                 </label>
               </th>
               <th>Actions</th>
-              <th>User ID</th>
-              <th>Name</th>
-              <th>Lastname</th>
               <th>Email</th>
-              <th>Phone</th>
-              <th>Address</th>
+              <th>User ID</th>
               <th>Role</th>
               <th>Status</th>
+              <th>Name</th>
+              <th>Lastname</th>
+              <th>Phone</th>
+              <th>Address</th>
             </tr>
           </thead>
 
@@ -323,52 +350,83 @@ export default function ManageAdmins() {
               </tr>
             )}
 
-            {(items || []).map((u) => (
-              <tr key={u._id}>
-                <th>
-                  <input
-                    type="checkbox"
-                    className="checkbox w-4 h-4"
-                    checked={selectedIds.has(u._id)}
-                    onChange={() => toggleOne(u._id)}
-                  />
-                </th>
+            {(items || []).map((u) => {
+              const protectedRow = isProtected(u);
 
-                <td>
-                  <div className="flex gap-2">
-                    <Link
-                      to={`/dashboard/users/${u._id}/edit`}
-                      className="btn btn-warning btn-sm rounded-full"
-                    >
-                      Edit
-                    </Link>
+              return (
+                <tr key={u._id} className={protectedRow ? "opacity-90" : ""}>
+                  <th>
+                    <input
+                      type="checkbox"
+                      className="checkbox w-4 h-4"
+                      checked={selectedIds.has(u._id)}
+                      onChange={() => toggleOne(u._id)}
+                      disabled={protectedRow}
+                      title={
+                        protectedRow
+                          ? "Protected account (cannot select)"
+                          : "Select user"
+                      }
+                    />
+                  </th>
 
-                    {/* <button
-                      className="btn btn-error btn-sm rounded-full"
-                      onClick={() => handleDeleteOne(u._id)}
-                      disabled={loading}
-                    >
-                      Delete
-                    </button> */}
-                  </div>
-                </td>
+                  <td>
+                    <div className="flex gap-2">
+                      {!protectedRow ? (
+                        <Link
+                          to={`/dashboard/users/${u._id}/edit`}
+                          className="btn btn-warning btn-sm rounded-full"
+                        >
+                          Edit
+                        </Link>
+                      ) : (
+                        <button
+                          className="btn btn-ghost btn-sm rounded-full"
+                          disabled
+                          title="You can't edit this account from this panel"
+                        >
+                          Edit
+                        </button>
+                      )}
 
-                <td className="font-mono text-xs">{u._id}</td>
-                <td className="font-bold">{u.fName || "-"}</td>
-                <td>{u.lName || "-"}</td>
-                <td>{u.email || "-"}</td>
-                <td>{u.phone || "-"}</td>
-                <td className="max-w-[320px] whitespace-normal">
-                  {u.address || "-"}
-                </td>
-                <td>
-                  <RoleBadge value={u.role} />
-                </td>
-                <td>
-                  <StatusBadge value={u.status} />
-                </td>
-              </tr>
-            ))}
+                      {/* Optional single delete */}
+                      {/* {!protectedRow && (
+                        <button
+                          className="btn btn-error btn-sm rounded-full"
+                          onClick={() => handleDeleteOne(u)}
+                          disabled={loading}
+                        >
+                          Delete
+                        </button>
+                      )} */}
+                    </div>
+                  </td>
+
+                  <td>{u.email || "-"}</td>
+                  <td className="font-mono text-xs">{u._id}</td>
+                  <td>
+                    <RoleBadge value={u.role} />
+                  </td>
+                  <td>
+                    <StatusBadge value={u.status} />
+                  </td>
+
+                  <td className="font-bold">
+                    {u.fName || "-"}{" "}
+                    {protectedRow && (
+                      <span className="ml-2 badge badge-outline badge-sm">
+                        Protected
+                      </span>
+                    )}
+                  </td>
+                  <td>{u.lName || "-"}</td>
+                  <td>{u.phone || "-"}</td>
+                  <td className="max-w-[320px] whitespace-normal">
+                    {u.address || "-"}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -383,7 +441,10 @@ export default function ManageAdmins() {
           Prev
         </button>
 
-        <span className="pt-2 opacity-70">Page {page}</span>
+        <span className="pt-2 opacity-70">
+          Page {page}
+          {/* Page {page} / {pages} */}
+        </span>
 
         <button
           className="btn"

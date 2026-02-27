@@ -1,6 +1,7 @@
+// AddEditUserByAdmin.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 import {
@@ -25,7 +26,7 @@ const statusBadgeClass = (status) => {
     case "active":
       return "badge-success";
     case "inactive":
-      return "badge-ghost";
+      return "badge-neutral";
     case "suspended":
       return "badge-warning";
     case "deactivated":
@@ -42,10 +43,21 @@ export default function AddEditUserByAdmin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { user } = useSelector((state) => state.authStore || {});
+  const myId = user?._id;
+
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(emptyForm);
 
   const title = useMemo(() => (isNew ? "Add User" : "Edit User"), [isNew]);
+
+  // ✅ Block self-edit on this page (UX guard)
+  useEffect(() => {
+    if (!isNew && myId && String(myId) === String(id)) {
+      toast.error("You cannot edit your own account from this page.");
+      navigate("/dashboard/admins");
+    }
+  }, [isNew, myId, id, navigate]);
 
   useEffect(() => {
     const load = async () => {
@@ -87,6 +99,13 @@ export default function AddEditUserByAdmin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // ✅ hard stop self update from UI too
+    if (!isNew && myId && String(myId) === String(id)) {
+      toast.error("You cannot edit your own account from this page.");
+      return;
+    }
+
     setLoading(true);
 
     const payload = {
@@ -281,7 +300,7 @@ export default function AddEditUserByAdmin() {
               />
             </label>
 
-            {/* PASSWORD */}
+            {/* PASSWORD (new only) */}
             {isNew && (
               <label className="form-control w-full md:col-span-2">
                 <div className="label py-1">
