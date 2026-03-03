@@ -5,6 +5,7 @@ import bookReducer from "../features/book/bookSlice";
 import borrowReducer from "../features/borrow/borrowSlice";
 import reviewReducer from "../features/review/reviewSlice";
 import userReducer from "../features/user/userSlice";
+import holdReducer from "../features/hold/holdSlice";
 
 const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
     borrowStore: borrowReducer,
     reviewStore: reviewReducer,
     userStore: userReducer,
+    holdStore: holdReducer,
   },
 });
 //NOW: authStore, bookStore, borrowStore, reviewStore are available in the whole app.

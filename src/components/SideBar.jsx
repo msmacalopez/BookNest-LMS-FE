@@ -14,10 +14,12 @@ export default function SideBar() {
     { name: "My Borrows", path: "/dashboard/myborrows" },
     { name: "Profile", path: "/dashboard/profile" },
     { name: "My Reviews", path: "/dashboard/myreviews" },
+    { name: "My Holds", path: "/dashboard/myholds" },
   ];
 
   const adminItems = [
     { name: "Books", path: "/dashboard/books" },
+    { name: "Holds", path: "/dashboard/holds" },
     { name: "Borrows", path: "/dashboard/borrows" },
     { name: "Review", path: "/dashboard/reviews" },
     { name: "Members", path: "/dashboard/members" },

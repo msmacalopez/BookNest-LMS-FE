@@ -28,6 +28,7 @@ import ProfilePage from "./pages/private-any/ProfilePage.jsx";
 import MyReviews from "./pages/private-any/MyReviews.jsx";
 // admin pages:
 import BookManagementPage from "./pages/private-admin/BookManagementPage.jsx";
+import Holds from "./pages/private-admin/Holds.jsx";
 import BorrowManagementPage from "./pages/private-admin/BorrowManagementPage.jsx";
 import ReviewManagementPage from "./pages/private-admin/ReviewManagementPage.jsx";
 import AddEditBookPage from "./pages/private-admin/AddEditBookPage.jsx";
@@ -36,6 +37,7 @@ import BorrowsResultOfSearch from "./pages/private-admin/BorrowsResultOfSearch.j
 //Super Admin pages:
 import ManageAdmins from "./pages/private-system/ManageAdmins.jsx";
 import AddEditUserByAdmin from "./pages/private-system/AddEditUserByAdmin.jsx";
+import MyHolds from "./pages/private-any/MyHolds.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -64,9 +66,11 @@ function App() {
               <Route path="myborrows" element={<MyBorrowsBooksPage />} />
               <Route path="profile" element={<ProfilePage />} />
               <Route path="myreviews" element={<MyReviews />} />
+              <Route path="myholds" element={<MyHolds />} />
 
               {/* Admins */}
               <Route path="books" element={<BookManagementPage />} />
+              <Route path="holds" element={<Holds />} />
               <Route path="borrows" element={<BorrowManagementPage />} />
               <Route path="reviews" element={<ReviewManagementPage />} />
               <Route path="members" element={<MembersManagementPage />} />
