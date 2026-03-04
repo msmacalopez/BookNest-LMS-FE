@@ -160,15 +160,15 @@ export default function ManageAdmins() {
     }
   };
 
-  const goPrev = () => {
-    if (page <= 1) return;
-    dispatch(setAdminUsersPage(page - 1));
-  };
+  // const goPrev = () => {
+  //   if (page <= 1) return;
+  //   dispatch(setAdminUsersPage(page - 1));
+  // };
 
-  const goNext = () => {
-    if (page >= pages) return;
-    dispatch(setAdminUsersPage(page + 1));
-  };
+  // const goNext = () => {
+  //   if (page >= pages) return;
+  //   dispatch(setAdminUsersPage(page + 1));
+  // };
 
   const StatusBadge = ({ value }) => {
     const cls =
@@ -197,10 +197,9 @@ export default function ManageAdmins() {
       <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
         {/* LEFT: Title */}
         <div className="space-y-1">
-          <h1 className="text-primary text-2xl font-bold leading-tight whitespace-nowrap">
+          <h1 className="text-primary text-2xl font-bold leading-tight whitespace-nowrap mb-10">
             Users Management
           </h1>
-          <p className="text-sm opacity-70">Search and filter.</p>
         </div>
 
         {/* RIGHT: Actions + Filters */}
@@ -431,29 +430,39 @@ export default function ManageAdmins() {
         </table>
       </div>
 
-      {/* pagination */}
-      <div className="flex justify-center gap-3 mt-8">
-        <button
-          className="btn"
-          onClick={goPrev}
-          disabled={page <= 1 || loading}
-        >
-          Prev
-        </button>
+      {/* Pagination */}
+      {pages > 1 && (
+        <div className="join flex justify-center mt-8">
+          <button
+            className="join-item btn"
+            onClick={() => dispatch(setAdminUsersPage(Math.max(1, page - 1)))}
+            disabled={page <= 1 || loading}
+          >
+            «
+          </button>
 
-        <span className="pt-2 opacity-70">
-          Page {page}
-          {/* Page {page} / {pages} */}
-        </span>
+          {Array.from({ length: pages }, (_, i) => i + 1).map((p) => (
+            <button
+              key={p}
+              className={`join-item btn ${p === page ? "btn-active" : ""}`}
+              onClick={() => dispatch(setAdminUsersPage(p))}
+              disabled={loading}
+            >
+              {p}
+            </button>
+          ))}
 
-        <button
-          className="btn"
-          onClick={goNext}
-          disabled={page >= pages || loading}
-        >
-          Next
-        </button>
-      </div>
+          <button
+            className="join-item btn"
+            onClick={() =>
+              dispatch(setAdminUsersPage(Math.min(pages, page + 1)))
+            }
+            disabled={page >= pages || loading}
+          >
+            »
+          </button>
+        </div>
+      )}
     </div>
   );
 }

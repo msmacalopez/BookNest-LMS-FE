@@ -255,29 +255,39 @@ export default function MembersManagementPage() {
         </table>
       </div>
 
-      {/* pagination */}
-      <div className="flex justify-center gap-3 mt-8">
-        <button
-          className="btn"
-          onClick={() => dispatch(setAdminMembersPage(Math.max(1, page - 1)))}
-          disabled={page <= 1 || loading}
-        >
-          Prev
-        </button>
+      {/* Pagination */}
+      {pages > 1 && (
+        <div className="join flex justify-center mt-8">
+          <button
+            className="join-item btn"
+            onClick={() => dispatch(setAdminMembersPage(Math.max(1, page - 1)))}
+            disabled={page <= 1 || loading}
+          >
+            «
+          </button>
 
-        <span className="pt-2">
-          Page {page}
-          {/* Page {page} / {pages} */}
-        </span>
+          {Array.from({ length: pages }, (_, i) => i + 1).map((p) => (
+            <button
+              key={p}
+              className={`join-item btn ${p === page ? "btn-active" : ""}`}
+              onClick={() => dispatch(setAdminMembersPage(p))}
+              disabled={loading}
+            >
+              {p}
+            </button>
+          ))}
 
-        <button
-          className="btn"
-          onClick={() => dispatch(setAdminMembersPage(page + 1))}
-          disabled={loading || page >= pages}
-        >
-          Next
-        </button>
-      </div>
+          <button
+            className="join-item btn"
+            onClick={() =>
+              dispatch(setAdminMembersPage(Math.min(pages, page + 1)))
+            }
+            disabled={page >= pages || loading}
+          >
+            »
+          </button>
+        </div>
+      )}
     </div>
   );
 }

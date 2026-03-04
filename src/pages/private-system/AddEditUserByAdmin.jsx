@@ -51,7 +51,7 @@ export default function AddEditUserByAdmin() {
 
   const title = useMemo(() => (isNew ? "Add User" : "Edit User"), [isNew]);
 
-  // ✅ Block self-edit on this page (UX guard)
+  // Block self-edit superadmin
   useEffect(() => {
     if (!isNew && myId && String(myId) === String(id)) {
       toast.error("You cannot edit your own account from this page.");
@@ -100,7 +100,7 @@ export default function AddEditUserByAdmin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // ✅ hard stop self update from UI too
+    //another guard to edit superadmin itself
     if (!isNew && myId && String(myId) === String(id)) {
       toast.error("You cannot edit your own account from this page.");
       return;
@@ -143,7 +143,7 @@ export default function AddEditUserByAdmin() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4">
+    <div className="w-full min-w-0">
       {/* Header */}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -179,16 +179,15 @@ export default function AddEditUserByAdmin() {
       </div>
 
       {/* Card */}
-      <div className="card bg-base-100 shadow-sm mt-4">
-        <div className="card-body p-5">
-          <div className="flex justify-between items-center mb-1">
-            <h2 className="font-semibold text-base opacity-80">User Details</h2>
+      <div className="card bg-base-100 shadow-sm">
+        <div className="card-body p-2">
+          <div className="flex justify-between items-center">
+            {/* <h2 className="font-semibold text-base opacity-80">User Details</h2> */}
             {loading && (
               <span className="loading loading-spinner loading-xs"></span>
             )}
           </div>
-
-          <div className="divider my-2"></div>
+          {/* <div className="divider my-2"></div> */}
 
           {/* FORM */}
           <form
@@ -300,7 +299,7 @@ export default function AddEditUserByAdmin() {
               />
             </label>
 
-            {/* PASSWORD (new only) */}
+            {/* PASSWORD -> needs to be different than original*/}
             {isNew && (
               <label className="form-control w-full md:col-span-2">
                 <div className="label py-1">

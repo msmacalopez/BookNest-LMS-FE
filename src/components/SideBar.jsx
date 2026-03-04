@@ -12,7 +12,7 @@ export default function SideBar() {
   const memberItems = [
     // { name: "Dashboard", path: "/dashboard" },
     { name: "My Borrows", path: "/dashboard/myborrows" },
-    { name: "Profile", path: "/dashboard/profile" },
+    { name: "My Profile", path: "/dashboard/profile" },
     { name: "My Reviews", path: "/dashboard/myreviews" },
     { name: "My Holds", path: "/dashboard/myholds" },
   ];
@@ -21,13 +21,11 @@ export default function SideBar() {
     { name: "Books", path: "/dashboard/books" },
     { name: "Holds", path: "/dashboard/holds" },
     { name: "Borrows", path: "/dashboard/borrows" },
-    { name: "Review", path: "/dashboard/reviews" },
+    { name: "Reviews", path: "/dashboard/reviews" },
     { name: "Members", path: "/dashboard/members" },
   ];
 
-  const superAdminItems = [
-    { name: "Manage Librarians", path: "/dashboard/admins" },
-  ];
+  const superAdminItems = [{ name: "Manage Users", path: "/dashboard/admins" }];
 
   return (
     <div className="flex flex-col gap-5">

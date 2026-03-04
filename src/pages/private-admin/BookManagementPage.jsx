@@ -10,6 +10,12 @@ import {
   deleteBookAdminAction,
 } from "../../features/book/bookAction";
 
+import {
+  setCatalogPage,
+  setCatalogQuery,
+  resetCatalog,
+} from "../../features/book/bookSlice";
+
 const selectCatalog = (s) => s.bookStore?.catalog || s.books?.catalog;
 
 export default function BookManagementPage() {
@@ -29,13 +35,22 @@ export default function BookManagementPage() {
   const pages = pagination?.pages ?? 1;
 
   const [qInput, setQInput] = useState(lastQuery?.params?.q ?? "");
+  useEffect(() => {
+    setQInput(lastQuery?.params?.q ?? "");
+  }, [lastQuery?.params?.q]);
+
   const [selectedIds, setSelectedIds] = useState(() => new Set());
 
-  // Initial load (admin list)
   useEffect(() => {
-    dispatch(fetchAllBooksAction({ q: "", page: 1, limit: 10 }));
+    dispatch(resetCatalog());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(
+      fetchAllBooksAction({ q: lastQuery?.params?.q || "", page, limit })
+    );
+  }, [dispatch, page, limit, lastQuery?.params?.q]);
 
   // Clear selection whenever list changes
   useEffect(() => {
@@ -67,12 +82,14 @@ export default function BookManagementPage() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    dispatch(fetchAllBooksAction({ q: qInput.trim(), page: 1, limit }));
+    dispatch(setCatalogQuery(qInput.trim()));
+    dispatch(setCatalogPage(1));
   };
 
   const handleClear = () => {
     setQInput("");
-    dispatch(fetchAllBooksAction({ q: "", page: 1, limit }));
+    dispatch(setCatalogQuery(""));
+    dispatch(setCatalogPage(1));
   };
 
   const refresh = (goToPage = page) => {
@@ -114,15 +131,15 @@ export default function BookManagementPage() {
     refresh(1);
   };
 
-  const goPrev = () => {
-    if (page <= 1) return;
-    dispatch(fetchAllBooksAction({ q: qInput.trim(), page: page - 1, limit }));
-  };
+  // const goPrev = () => {
+  //   if (page <= 1) return;
+  //   dispatch(fetchAllBooksAction({ q: qInput.trim(), page: page - 1, limit }));
+  // };
 
-  const goNext = () => {
-    if (page >= pages) return;
-    dispatch(fetchAllBooksAction({ q: qInput.trim(), page: page + 1, limit }));
-  };
+  // const goNext = () => {
+  //   if (page >= pages) return;
+  //   dispatch(fetchAllBooksAction({ q: qInput.trim(), page: page + 1, limit }));
+  // };
 
   const handleToggleStatus = async (book) => {
     const nextStatus = book.status === "active" ? "inactive" : "active";
@@ -149,12 +166,15 @@ export default function BookManagementPage() {
     <div>
       {/* Header controls */}
       <div className="flex flex-col gap-2 md:flex-row md:gap-8 items-center">
-        <h1 className="text-primary text-2xl font-bold mb-3">
+        <h1 className="text-primary text-2xl font-bold my-3">
           Books Management
         </h1>
 
         {/*NEW route */}
-        <Link to="/dashboard/books/new" className="btn btn-success max-h-8">
+        <Link
+          to="/dashboard/books/new"
+          className="btn btn-success btn-sm rounded-full"
+        >
           Add New Book
         </Link>
 
@@ -201,7 +221,7 @@ export default function BookManagementPage() {
 
         {/* Bulk delete */}
         <button
-          className="btn btn-error max-h-8 mb-2 md:mb-0"
+          className="btn btn-error btn-sm rounded-full"
           onClick={handleBulkDelete}
           disabled={selectedIds.size === 0 || loading}
         >
@@ -359,33 +379,36 @@ export default function BookManagementPage() {
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-center gap-3 mt-8">
-        <button
-          className="btn"
-          onClick={goPrev}
-          disabled={page <= 1 || loading}
-        >
-          Prev
-        </button>
+      {pages > 1 && (
+        <div className="join flex justify-center mt-8">
+          <button
+            className="join-item btn"
+            onClick={() => dispatch(setCatalogPage(Math.max(1, page - 1)))}
+            disabled={page <= 1 || loading}
+          >
+            «
+          </button>
 
-        <span className="pt-2 opacity-70">
-          Page {page}
-          {/* Page {page} of {pages} */}
-        </span>
+          {Array.from({ length: pages }, (_, i) => i + 1).map((p) => (
+            <button
+              key={p}
+              className={`join-item btn ${p === page ? "btn-active" : ""}`}
+              onClick={() => dispatch(setCatalogPage(p))}
+              disabled={loading}
+            >
+              {p}
+            </button>
+          ))}
 
-        <button
-          className="btn"
-          onClick={goNext}
-          disabled={page >= pages || loading}
-        >
-          Next
-        </button>
-      </div>
-
-      {/* Small page indicator */}
-      {/* <p className="text-center mt-2 opacity-70 text-sm">
-        Page {page} of {pages}
-      </p> */}
+          <button
+            className="join-item btn"
+            onClick={() => dispatch(setCatalogPage(Math.min(pages, page + 1)))}
+            disabled={page >= pages || loading}
+          >
+            »
+          </button>
+        </div>
+      )}
     </div>
   );
 }

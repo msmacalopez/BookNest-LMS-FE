@@ -226,26 +226,39 @@ export default function MyBorrowsBooksPage() {
         </div>
       )}
 
-      {/* Pagination*/}
-      <div className="flex justify-center gap-3 mt-8">
-        <button
-          className="btn"
-          onClick={() => dispatch(setMyBorrowsPage(Math.max(1, page - 1)))}
-          disabled={page <= 1 || loading}
-        >
-          Prev
-        </button>
+      {/* Pagination */}
+      {pages > 1 && (
+        <div className="join flex justify-center mt-8">
+          <button
+            className="join-item btn"
+            onClick={() => dispatch(setMyBorrowsPage(Math.max(1, page - 1)))}
+            disabled={page <= 1 || loading}
+          >
+            «
+          </button>
 
-        <span className="pt-2">Page {page}</span>
+          {Array.from({ length: pages }, (_, i) => i + 1).map((p) => (
+            <button
+              key={p}
+              className={`join-item btn ${p === page ? "btn-active" : ""}`}
+              onClick={() => dispatch(setMyBorrowsPage(p))}
+              disabled={loading}
+            >
+              {p}
+            </button>
+          ))}
 
-        <button
-          className="btn"
-          onClick={() => dispatch(setMyBorrowsPage(page + 1))}
-          disabled={loading || page >= pages}
-        >
-          Next
-        </button>
-      </div>
+          <button
+            className="join-item btn"
+            onClick={() =>
+              dispatch(setMyBorrowsPage(Math.min(pages, page + 1)))
+            }
+            disabled={page >= pages || loading}
+          >
+            »
+          </button>
+        </div>
+      )}
 
       {/* ---------- MODAL ---------- */}
       {isModalOpen && (

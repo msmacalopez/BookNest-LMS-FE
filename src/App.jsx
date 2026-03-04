@@ -28,7 +28,7 @@ import ProfilePage from "./pages/private-any/ProfilePage.jsx";
 import MyReviews from "./pages/private-any/MyReviews.jsx";
 // admin pages:
 import BookManagementPage from "./pages/private-admin/BookManagementPage.jsx";
-import Holds from "./pages/private-admin/Holds.jsx";
+import HoldsManagement from "./pages/private-admin/HoldsManagement.jsx";
 import BorrowManagementPage from "./pages/private-admin/BorrowManagementPage.jsx";
 import ReviewManagementPage from "./pages/private-admin/ReviewManagementPage.jsx";
 import AddEditBookPage from "./pages/private-admin/AddEditBookPage.jsx";
@@ -70,7 +70,7 @@ function App() {
 
               {/* Admins */}
               <Route path="books" element={<BookManagementPage />} />
-              <Route path="holds" element={<Holds />} />
+              <Route path="holds" element={<HoldsManagement />} />
               <Route path="borrows" element={<BorrowManagementPage />} />
               <Route path="reviews" element={<ReviewManagementPage />} />
               <Route path="members" element={<MembersManagementPage />} />

@@ -226,29 +226,39 @@ export default function BorrowManagementPage() {
         </table>
       </div>
 
-      {/* pagination */}
-      <div className="flex justify-center gap-3 mt-8">
-        <button
-          className="btn"
-          onClick={() => dispatch(setAllBorrowsPage(Math.max(1, page - 1)))}
-          disabled={page <= 1 || loading}
-        >
-          Prev
-        </button>
+      {/* Pagination */}
+      {pages > 1 && (
+        <div className="join flex justify-center mt-8">
+          <button
+            className="join-item btn"
+            onClick={() => dispatch(setAllBorrowsPage(Math.max(1, page - 1)))}
+            disabled={page <= 1 || loading}
+          >
+            «
+          </button>
 
-        <span className="pt-2">
-          Page {page}
-          {/* Page {page} of {pages} • Total {pagination?.total || 0} */}
-        </span>
+          {Array.from({ length: pages }, (_, i) => i + 1).map((p) => (
+            <button
+              key={p}
+              className={`join-item btn ${p === page ? "btn-active" : ""}`}
+              onClick={() => dispatch(setAllBorrowsPage(p))}
+              disabled={loading}
+            >
+              {p}
+            </button>
+          ))}
 
-        <button
-          className="btn"
-          onClick={() => dispatch(setAllBorrowsPage(page + 1))}
-          disabled={loading || page >= pages}
-        >
-          Next
-        </button>
-      </div>
+          <button
+            className="join-item btn"
+            onClick={() =>
+              dispatch(setAllBorrowsPage(Math.min(pages, page + 1)))
+            }
+            disabled={page >= pages || loading}
+          >
+            »
+          </button>
+        </div>
+      )}
     </div>
   );
 }
