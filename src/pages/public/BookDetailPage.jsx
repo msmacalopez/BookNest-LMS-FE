@@ -405,7 +405,7 @@ export default function BookDetailPage() {
         </div>
       </div>
 
-      <BookReviews />
+      <BookReviews bookId={bookId} />
     </div>
   );
 }
