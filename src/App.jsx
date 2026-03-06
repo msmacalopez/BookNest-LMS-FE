@@ -22,11 +22,13 @@ import BookDetailPage from "./pages/public/BookDetailPage.jsx";
 import LoginPage from "./pages/public/LoginPage.jsx";
 import SignupPage from "./pages/public/SignupPage.jsx";
 // private pages:
-import DashboardHome from "./pages/private-any/DashboardHome.jsx";
-import MyBorrowsBooksPage from "./pages/private-any/MyBorrowsBooksPage.jsx";
-import ProfilePage from "./pages/private-any/ProfilePage.jsx";
-import MyReviews from "./pages/private-any/MyReviews.jsx";
+import MemberDashboard from "./pages/private-member/MemberDashboard.jsx";
+import MyBorrowsBooksPage from "./pages/private-member/MyBorrowsBooksPage.jsx";
+import ProfilePage from "./pages/private-member/ProfilePage.jsx";
+import MyReviews from "./pages/private-member/MyReviews.jsx";
+import MyHolds from "./pages/private-member/MyHolds.jsx";
 // admin pages:
+import AdminDashboard from "./pages/private-admin/AdminDashboard.jsx";
 import BookManagementPage from "./pages/private-admin/BookManagementPage.jsx";
 import HoldsManagement from "./pages/private-admin/HoldsManagement.jsx";
 import BorrowManagementPage from "./pages/private-admin/BorrowManagementPage.jsx";
@@ -37,7 +39,6 @@ import BorrowsResultOfSearch from "./pages/private-admin/BorrowsResultOfSearch.j
 //Super Admin pages:
 import ManageAdmins from "./pages/private-system/ManageAdmins.jsx";
 import AddEditUserByAdmin from "./pages/private-system/AddEditUserByAdmin.jsx";
-import MyHolds from "./pages/private-any/MyHolds.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -62,13 +63,14 @@ function App() {
             {/* private routes */}
             <Route path="/dashboard" element={<DashboardLayout />}>
               {/* Logged In Members */}
-              <Route index element={<DashboardHome />} />
+              <Route index element={<MemberDashboard />} />
               <Route path="myborrows" element={<MyBorrowsBooksPage />} />
               <Route path="profile" element={<ProfilePage />} />
               <Route path="myreviews" element={<MyReviews />} />
               <Route path="myholds" element={<MyHolds />} />
 
               {/* Admins */}
+              <Route path="admin" element={<AdminDashboard />} />
               <Route path="books" element={<BookManagementPage />} />
               <Route path="holds" element={<HoldsManagement />} />
               <Route path="borrows" element={<BorrowManagementPage />} />

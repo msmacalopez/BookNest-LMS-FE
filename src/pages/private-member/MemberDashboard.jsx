@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function DashboardHome() {
+export default function MemberDashboard() {
   return (
     <div>
       {/* Title */}
@@ -36,7 +36,7 @@ export default function DashboardHome() {
             Borrow Tab
           </legend>
 
-          <label className="label">Enter Member Number or Scan</label>
+          <label className="label">Enter Member Number, email or Scan</label>
           <input type="text" className="input" placeholder="e.g. M1234" />
 
           <label className="label">Enter Book ISBN or Scan</label>

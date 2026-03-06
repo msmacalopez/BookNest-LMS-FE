@@ -38,3 +38,20 @@ export const adminReturnBook = async (borrowId) => {
     isPrivate: true,
   });
 };
+
+export const adminCreateBorrow = async ({ userId, bookId }) => {
+  return apiProcessor({
+    method: "post",
+    url: `/borrows/${userId}/${bookId}`,
+    isPrivate: true,
+  });
+};
+
+export const adminCreateBorrowByQuery = async ({ memberQuery, bookQuery }) => {
+  return apiProcessor({
+    method: "post",
+    url: `/borrows/admin/manual`,
+    data: { memberQuery, bookQuery },
+    isPrivate: true,
+  });
+};

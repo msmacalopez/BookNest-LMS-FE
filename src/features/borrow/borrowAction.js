@@ -14,6 +14,7 @@ import {
   fetchMyBorrows,
   fetchAllBorrows,
   adminReturnBook,
+  adminCreateBorrowByQuery,
 } from "./borrowAPI";
 
 export const createMyBorrowAction = (bookId) => async (dispatch) => {
@@ -99,3 +100,24 @@ export const adminReturnBookAction = (borrowId) => async (dispatch) => {
     return { status: "error", message: e?.message || "Return failed" };
   }
 };
+
+export const adminCreateBorrowByQueryAction =
+  ({ memberQuery, bookQuery }) =>
+  async (dispatch) => {
+    try {
+      dispatch(borrowPending());
+
+      const res = await adminCreateBorrowByQuery({ memberQuery, bookQuery });
+
+      if (res?.status !== "success") {
+        dispatch(borrowFail(res?.message || "Borrow failed"));
+        return null;
+      }
+
+      dispatch(borrowSuccess(res));
+      return res;
+    } catch (e) {
+      dispatch(borrowFail(e?.message || "Borrow failed"));
+      return null;
+    }
+  };

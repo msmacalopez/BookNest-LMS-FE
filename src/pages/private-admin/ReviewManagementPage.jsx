@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -20,6 +20,19 @@ const fmtDate = (d) => {
   return dt.toLocaleDateString("en-AU");
 };
 
+const statusBadgeClass = (status) => {
+  switch (status) {
+    case "active":
+      return "badge-success";
+    case "inactive":
+      return "badge-warning";
+    case "blocked":
+      return "badge-error";
+    default:
+      return "badge-ghost";
+  }
+};
+
 export default function ReviewManagementPage() {
   const dispatch = useDispatch();
 
@@ -32,6 +45,10 @@ export default function ReviewManagementPage() {
 
   const [searchInput, setSearchInput] = useState(q);
   const [statusFilter, setStatusFilter] = useState(status);
+
+  // local state for row dropdowns
+  const [editedStatuses, setEditedStatuses] = useState({});
+  const [savingId, setSavingId] = useState("");
 
   useEffect(() => {
     dispatch(resetAllReviews());
@@ -46,6 +63,15 @@ export default function ReviewManagementPage() {
     if (error) toast.error(error);
   }, [error]);
 
+  // whenever items change, preload each row status into local state
+  useEffect(() => {
+    const initialStatuses = {};
+    items?.forEach((r) => {
+      initialStatuses[r._id] = r.status || "inactive";
+    });
+    setEditedStatuses(initialStatuses);
+  }, [items]);
+
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     dispatch(
@@ -58,18 +84,28 @@ export default function ReviewManagementPage() {
     dispatch(setAllReviewsQuery({ q: "", status: statusFilter }));
   };
 
-  const handleToggleStatus = async (reviewId, currentStatus) => {
-    const nextStatus = currentStatus === "active" ? "inactive" : "active";
+  const handleSaveStatus = async (reviewId, originalStatus) => {
+    const nextStatus = editedStatuses[reviewId];
+
+    if (!nextStatus || nextStatus === originalStatus) {
+      toast.info("No changes to save");
+      return;
+    }
+
+    setSavingId(reviewId);
+
     const res = await dispatch(
       adminUpdateReviewStatusAction(reviewId, nextStatus)
     );
+
+    setSavingId("");
 
     if (res?.status !== "success") {
       toast.error(res?.message || "Failed to update review");
       return;
     }
 
-    toast.success(res?.message || "Updated");
+    toast.success(res?.message || "Review status updated");
     dispatch(fetchAllReviewsAction({ q, status, page, limit }));
   };
 
@@ -127,6 +163,7 @@ export default function ReviewManagementPage() {
             <option value="">--- All Status ---</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
+            <option value="blocked">Blocked</option>
           </select>
 
           <button
@@ -141,7 +178,7 @@ export default function ReviewManagementPage() {
       <hr className="my-3" />
 
       <div className="w-full min-w-0 max-w-full overflow-x-auto mt-4">
-        <table className="table w-max min-w-[1200px]">
+        <table className="table w-max min-w-[1320px]">
           <thead>
             <tr>
               <th>Review Title</th>
@@ -165,6 +202,11 @@ export default function ReviewManagementPage() {
                 const bookAuthor = r.bookAuthor || r.bookId?.author || "N/A";
                 const email = r.memberEmail || r.userId?.email || "-";
 
+                const selectedStatus =
+                  editedStatuses[r._id] || r.status || "inactive";
+                const hasChanged = selectedStatus !== r.status;
+                const isSavingThisRow = savingId === r._id;
+
                 return (
                   <tr key={r._id}>
                     <td className="font-bold min-w-48">{r.title || "-"}</td>
@@ -185,14 +227,8 @@ export default function ReviewManagementPage() {
                     <td>{email}</td>
 
                     <td>
-                      <span
-                        className={`badge ${
-                          r.status === "active"
-                            ? "badge-success"
-                            : "badge-error"
-                        }`}
-                      >
-                        {r.status}
+                      <span className={`badge ${statusBadgeClass(r.status)}`}>
+                        {r.status || "-"}
                       </span>
                     </td>
 
@@ -203,17 +239,31 @@ export default function ReviewManagementPage() {
                     <td>{fmtDate(r.createdAt)}</td>
 
                     <td className="text-right">
-                      <button
-                        className={`btn btn-sm rounded-2xl ${
-                          r.status === "active" ? "btn-error" : "btn-success"
-                        }`}
-                        disabled={loading}
-                        onClick={() => handleToggleStatus(r._id, r.status)}
-                      >
-                        {r.status === "active"
-                          ? "Make Inactive"
-                          : "Make Active"}
-                      </button>
+                      <div className="flex items-center justify-end gap-2 min-w-[220px]">
+                        <select
+                          className="select select-bordered select-sm rounded-xl"
+                          value={selectedStatus}
+                          disabled={loading || isSavingThisRow}
+                          onChange={(e) =>
+                            setEditedStatuses((prev) => ({
+                              ...prev,
+                              [r._id]: e.target.value,
+                            }))
+                          }
+                        >
+                          <option value="active">Active</option>
+                          <option value="inactive">Inactive</option>
+                          <option value="blocked">Blocked</option>
+                        </select>
+
+                        <button
+                          className="btn btn-sm btn-primary rounded-xl"
+                          disabled={loading || isSavingThisRow || !hasChanged}
+                          onClick={() => handleSaveStatus(r._id, r.status)}
+                        >
+                          {isSavingThisRow ? "Saving..." : "Save"}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -229,7 +279,6 @@ export default function ReviewManagementPage() {
         </table>
       </div>
 
-      {/* Pagination */}
       {pages > 1 && (
         <div className="join flex justify-center mt-8">
           <button

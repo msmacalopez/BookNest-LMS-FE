@@ -18,6 +18,7 @@ export default function SideBar() {
   ];
 
   const adminItems = [
+    // { name: "Admin Dashboard", path: "/dashboard/admin" },
     { name: "Books", path: "/dashboard/books" },
     { name: "Holds", path: "/dashboard/holds" },
     { name: "Borrows", path: "/dashboard/borrows" },
@@ -65,7 +66,9 @@ export default function SideBar() {
       {["admin", "superadmin"].includes(user?.role) && (
         <div className="flex flex-col gap-3">
           <hr />
-          <p className="font-bold text-xl"> Manage</p>
+          <Link to="/dashboard/admin" className="font-bold text-xl">
+            Admin Dashboard
+          </Link>
           {adminItems.map((item) => (
             <NavLink
               key={item.path}
