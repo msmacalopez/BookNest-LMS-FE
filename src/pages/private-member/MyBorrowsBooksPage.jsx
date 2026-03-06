@@ -278,17 +278,20 @@ export default function MyBorrowsBooksPage() {
             <form onSubmit={handleSubmitReview} className="mt-4 space-y-4">
               <div>
                 <label className="label">
-                  <span className="label-text font-semibold">Rating (1–5)</span>
+                  <span className="label-text font-semibold">Rating</span>
                 </label>
-                <input
-                  type="number"
-                  min="1"
-                  max="5"
-                  className="input input-bordered w-full"
+                <select
+                  className="select select-bordered w-full"
                   value={rating}
-                  onChange={(e) => setRating(e.target.value)}
+                  onChange={(e) => setRating(Number(e.target.value))}
                   required
-                />
+                >
+                  <option value={5}>5 - Excellent</option>
+                  <option value={4}>4 - Good</option>
+                  <option value={3}>3 - Average</option>
+                  <option value={2}>2 - Poor</option>
+                  <option value={1}>1 - Very Poor</option>
+                </select>
               </div>
 
               <div>

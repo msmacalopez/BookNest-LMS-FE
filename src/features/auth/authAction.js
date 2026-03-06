@@ -115,16 +115,25 @@ export const registerUserAction = (form) => async (dispatch) => {
     toast.promise(pending, { pending: "Registering..." });
 
     const res = await pending;
-    console.log("REGISTER RES:", res);
+    // console.log("REGISTER RES:", res);
 
     const { status, message } = res || {};
-    toast[status](message || "Registration response received");
+
+    let customeMessage = message;
+
+    if (message?.includes("E11000") && message?.includes("email")) {
+      customeMessage = "This email is already registered";
+    }
+    if (message?.includes("E11000") && message?.includes("phone")) {
+      customeMessage = "This phone is already registered";
+    }
+    toast[status]?.(customeMessage || "Registration response received");
+    // toast[status](message || "Registration response received");
 
     return res;
   } catch (e) {
-    toast.error(
-      e?.response?.data?.message || e.message || "Registration failed"
-    );
+    // toast.error(e?.response?.data?.message || e.message || "Registration failed");
+    toast.error("Registration failed");
     return { status: "error", message: e.message };
   }
 };
