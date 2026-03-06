@@ -22,8 +22,13 @@ export const apiProcessor = async ({
           ? localStorage.getItem("refreshJWT")
           : sessionStorage.getItem("accessJWT")
         : null,
-      "Content-Type": contentType,
+      // "Content-Type": contentType,
     };
+
+    // only set Content-Type manually when NOT using FormData
+    if (contentType && contentType !== "multipart/form-data") {
+      headers["Content-Type"] = contentType;
+    }
 
     //add base url from environment variable VITE_API_BASE_URL
     const apiUrl = import.meta.env.VITE_API_BASE_URL + url;

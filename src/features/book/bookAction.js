@@ -7,6 +7,7 @@ import {
   updateBookAdminAPI,
   deleteBookAdminAPI,
   fetchBookByIdAdmin,
+  uploadBookCoverAPI,
 } from "./bookAPI";
 
 import {
@@ -157,3 +158,7 @@ export const fetchLatestBooksAction =
       dispatch(setLatestLoading(false));
     }
   };
+
+export const uploadBookCoverAction = (formData) => async () => {
+  return await uploadBookCoverAPI(formData);
+};

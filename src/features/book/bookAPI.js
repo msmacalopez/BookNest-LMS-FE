@@ -95,3 +95,14 @@ export const deleteBookAdminAPI = (bookId) =>
     url: `/books/deletebook/${bookId}`,
     isPrivate: true,
   });
+
+//cloudinary upload book cover -> return url
+export const uploadBookCoverAPI = async (formData) => {
+  return apiProcessor({
+    method: "post",
+    url: "/upload/book-image",
+    data: formData,
+    isPrivate: true,
+    contentType: "multipart/form-data",
+  });
+};

@@ -8,6 +8,7 @@ import {
   addBookAdminAction,
   updateBookAdminAction,
   fetchBookByIdAdminAction,
+  uploadBookCoverAction,
 } from "../../features/book/bookAction";
 
 const GENRES = [
@@ -64,6 +65,10 @@ export default function AddEditBookPage() {
   const [form, setForm] = useState(emptyForm);
   const [loading, setLoading] = useState(false);
 
+  // image upload states
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
+
   const title = useMemo(() => (isNew ? "Add Book" : "Edit Book"), [isNew]);
 
   // Populate on edit
@@ -113,6 +118,45 @@ export default function AddEditBookPage() {
 
   const setField = (name) => (e) => {
     setForm((prev) => ({ ...prev, [name]: e.target.value }));
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setSelectedFile(file);
+  };
+
+  const handleUploadImage = async () => {
+    if (!selectedFile) {
+      toast.error("Please select an image first");
+      return;
+    }
+
+    const fd = new FormData();
+    fd.append("coverImage", selectedFile);
+
+    setUploadingImage(true);
+
+    const res = await dispatch(uploadBookCoverAction(fd));
+    const status = res?.payload?.status || res?.status;
+    const data = res?.payload?.data || res?.data;
+
+    setUploadingImage(false);
+
+    if (status !== "success" || !data?.url) {
+      toast.error(
+        res?.payload?.message || res?.message || "Image upload failed"
+      );
+      return;
+    }
+
+    setForm((prev) => ({
+      ...prev,
+      coverImageUrl: data.url,
+    }));
+
+    toast.success("Image uploaded successfully");
   };
 
   const handleSubmit = async (e) => {
@@ -203,14 +247,14 @@ export default function AddEditBookPage() {
           <button
             className="btn btn-ghost btn-sm"
             onClick={() => navigate(-1)}
-            disabled={loading}
+            disabled={loading || uploadingImage}
           >
             ← Back
           </button>
           <button
             className="btn btn-sm"
             onClick={() => navigate("/dashboard/books")}
-            disabled={loading}
+            disabled={loading || uploadingImage}
           >
             Books
           </button>
@@ -222,7 +266,7 @@ export default function AddEditBookPage() {
         <div className="card-body p-2">
           <div className="flex justify-between items-center">
             {/* <h2 className="font-semibold text-base opacity-80">Book Details</h2> */}
-            {loading && (
+            {(loading || uploadingImage) && (
               <span className="loading loading-spinner loading-xs"></span>
             )}
           </div>
@@ -242,7 +286,7 @@ export default function AddEditBookPage() {
                 className="select select-bordered select-sm w-full text-base"
                 value={form.status}
                 onChange={setField("status")}
-                disabled={loading}
+                disabled={loading || uploadingImage}
               >
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
@@ -258,7 +302,7 @@ export default function AddEditBookPage() {
                 className="input input-bordered input-sm w-full text-base"
                 value={form.title}
                 onChange={setField("title")}
-                disabled={loading}
+                disabled={loading || uploadingImage}
                 required
               />
             </label>
@@ -272,7 +316,7 @@ export default function AddEditBookPage() {
                 className="input input-bordered input-sm w-full text-base"
                 value={form.author}
                 onChange={setField("author")}
-                disabled={loading}
+                disabled={loading || uploadingImage}
                 required
               />
             </label>
@@ -291,7 +335,7 @@ export default function AddEditBookPage() {
                 onChange={setField("publicationYear")}
                 min="1000"
                 max={new Date().getFullYear()}
-                disabled={loading}
+                disabled={loading || uploadingImage}
                 required
               />
             </label>
@@ -306,7 +350,7 @@ export default function AddEditBookPage() {
                 value={form.isbn}
                 onChange={setField("isbn")}
                 inputMode="numeric"
-                disabled={loading}
+                disabled={loading || uploadingImage}
                 required
               />
             </label>
@@ -320,7 +364,7 @@ export default function AddEditBookPage() {
                 className="select select-bordered select-sm w-full text-base"
                 value={form.genre}
                 onChange={setField("genre")}
-                disabled={loading}
+                disabled={loading || uploadingImage}
                 required
               >
                 <option value="" disabled>
@@ -343,7 +387,7 @@ export default function AddEditBookPage() {
                 className="select select-bordered select-sm w-full text-base"
                 value={form.typeEdition}
                 onChange={setField("typeEdition")}
-                disabled={loading}
+                disabled={loading || uploadingImage}
                 required
               >
                 <option value="" disabled>
@@ -367,7 +411,7 @@ export default function AddEditBookPage() {
                 rows={4}
                 value={form.description}
                 onChange={setField("description")}
-                disabled={loading}
+                disabled={loading || uploadingImage}
                 required
               />
             </label>
@@ -381,7 +425,7 @@ export default function AddEditBookPage() {
                 className="input input-bordered input-sm w-full text-base"
                 value={form.language}
                 onChange={setField("language")}
-                disabled={loading}
+                disabled={loading || uploadingImage}
                 required
               />
             </label>
@@ -395,7 +439,7 @@ export default function AddEditBookPage() {
                 className="input input-bordered input-sm w-full text-base"
                 value={form.country}
                 onChange={setField("country")}
-                disabled={loading}
+                disabled={loading || uploadingImage}
                 required
               />
             </label>
@@ -409,7 +453,7 @@ export default function AddEditBookPage() {
                 className="input input-bordered input-sm w-full text-base"
                 value={form.publisher}
                 onChange={setField("publisher")}
-                disabled={loading}
+                disabled={loading || uploadingImage}
                 required
               />
             </label>
@@ -425,7 +469,7 @@ export default function AddEditBookPage() {
                 className="input input-bordered input-sm w-full text-base"
                 value={form.pages}
                 onChange={setField("pages")}
-                disabled={loading}
+                disabled={loading || uploadingImage}
                 required
               />
             </label>
@@ -441,25 +485,83 @@ export default function AddEditBookPage() {
                 className="input input-bordered input-sm w-full text-base"
                 value={form.quantityTotal}
                 onChange={setField("quantityTotal")}
-                disabled={loading}
+                disabled={loading || uploadingImage}
                 required
               />
             </label>
 
-            {/* COVER URL (optional) */}
-            <label className="form-control w-full">
+            {/* COVER IMAGE UPLOAD */}
+            <label className="form-control w-full md:col-span-2">
               <div className="label py-1">
                 <span className="label-text font-semibold">
-                  Cover Image URL (optional)
+                  Cover Image (optional)
                 </span>
               </div>
-              <input
-                className="input input-bordered input-sm w-full text-base"
-                value={form.coverImageUrl}
-                onChange={setField("coverImageUrl")}
-                disabled={loading}
-                placeholder="https://..."
-              />
+
+              <div className="flex flex-col gap-3">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="file-input file-input-bordered file-input-sm w-full"
+                  onChange={handleFileChange}
+                  disabled={loading || uploadingImage}
+                />
+
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    className="btn btn-outline btn-sm"
+                    onClick={handleUploadImage}
+                    disabled={!selectedFile || loading || uploadingImage}
+                  >
+                    {uploadingImage ? (
+                      <>
+                        <span className="loading loading-spinner loading-xs"></span>
+                        Uploading
+                      </>
+                    ) : (
+                      "Upload Image"
+                    )}
+                  </button>
+
+                  {form.coverImageUrl && (
+                    <a
+                      href={form.coverImageUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn btn-ghost btn-sm"
+                    >
+                      View Current Image
+                    </a>
+                  )}
+                </div>
+
+                {selectedFile && !form.coverImageUrl && (
+                  <p className="text-xs opacity-70">
+                    Selected file: {selectedFile.name}
+                  </p>
+                )}
+
+                {form.coverImageUrl && (
+                  <>
+                    <input
+                      className="input input-bordered input-sm w-full text-base"
+                      value={form.coverImageUrl}
+                      onChange={setField("coverImageUrl")}
+                      disabled={loading || uploadingImage}
+                      placeholder="https://..."
+                    />
+
+                    <div className="w-32 h-44 rounded-lg overflow-hidden border bg-base-200">
+                      <img
+                        src={form.coverImageUrl}
+                        alt="Book cover preview"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
             </label>
 
             {/* BUTTONS */}
@@ -468,7 +570,7 @@ export default function AddEditBookPage() {
                 type="button"
                 className="btn btn-sm"
                 onClick={() => navigate("/dashboard/books")}
-                disabled={loading}
+                disabled={loading || uploadingImage}
               >
                 Cancel
               </button>
@@ -476,7 +578,7 @@ export default function AddEditBookPage() {
               <button
                 type="submit"
                 className="btn btn-primary btn-sm"
-                disabled={loading}
+                disabled={loading || uploadingImage}
               >
                 {loading ? (
                   <>
