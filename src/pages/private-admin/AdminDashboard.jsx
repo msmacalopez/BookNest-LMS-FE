@@ -202,6 +202,8 @@ const AdminDashboard = () => {
         })
       );
 
+      console.log("admin borrow response:", res);
+
       if (res?.status === "success") {
         toast.success(res.message || "Book borrowed successfully.");
         setBorrowForm({
@@ -244,6 +246,7 @@ const AdminDashboard = () => {
         toast.error(res?.message || "Could not complete borrow.");
       }
     } catch (error) {
+      console.error("Borrow submit failed:", error);
       toast.error(error?.message || "Borrow failed.");
     } finally {
       setBorrowLoading(false);

@@ -111,13 +111,18 @@ export const adminCreateBorrowByQueryAction =
 
       if (res?.status !== "success") {
         dispatch(borrowFail(res?.message || "Borrow failed"));
-        return null;
+        return res; // actual error
       }
 
       dispatch(borrowSuccess(res));
       return res;
     } catch (e) {
-      dispatch(borrowFail(e?.message || "Borrow failed"));
-      return null;
+      const errRes = {
+        status: "error",
+        message: e?.message || "Borrow failed",
+      };
+
+      dispatch(borrowFail(errRes.message));
+      return errRes;
     }
   };
