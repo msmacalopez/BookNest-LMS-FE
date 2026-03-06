@@ -26,7 +26,6 @@ dist-ssr
 workflow.md
 
 node_modules
-.env
 .env.local
 .env.*
 dist
