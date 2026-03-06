@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, NavLink, useLocation } from "react-router-dom";
 
@@ -8,6 +8,10 @@ export default function SideBar() {
 
   //to hightlight the active menu item
   const location = useLocation();
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleCloseSidebar = () => setIsOpen(false);
 
   const memberItems = [
     // { name: "Dashboard", path: "/dashboard" },
@@ -29,88 +33,142 @@ export default function SideBar() {
   const superAdminItems = [{ name: "Manage Users", path: "/dashboard/admins" }];
 
   return (
-    <div className="flex flex-col gap-5">
-      {/* title */}
-      <div>
-        {/* <h1 className="font-bold text-2xl text-white">{user.fName}</h1> */}
-        <h1 className="font-mono text-accent text-2xl">Hello {user.fName}!</h1>
-      </div>
-      {/* MEMBERS */}
-      <div className="flex flex-col gap-3">
-        <Link to="/dashboard" className="font-bold text-xl">
-          Dashboard
-        </Link>
-        {memberItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            end={item.end}
-            // className={({ isActive }) =>
-            //   `px-3 py-2 rounded-lg transition ${
-            //     isActive
-            //       ? "border-l-4 border-primary text-primary font-semibold"
-            //       : "hover:bg-base-200"
-            //   }`
-            // }
-          >
-            {item.name}
-          </NavLink>
-        ))}
-
-        {/* <Link to="/dashboard">Dashboard</Link>
-        <Link to="/dashboard/myborrows">My Borrows</Link>
-        <Link to="/dashboard/profile">Profile</Link> */}
+    <>
+      {/* mobile toggle button */}
+      <div className="md:hidden mb-4">
+        <button
+          type="button"
+          className="btn btn-outline btn-sm"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? "Close Menu" : "Open Menu"}
+        </button>
       </div>
 
-      {/* ADMINS */}
-      {["admin", "superadmin"].includes(user?.role) && (
+      <div className={`${isOpen ? "flex" : "hidden"} md:flex flex-col gap-5`}>
+        {/* title */}
+        <div>
+          {/* <h1 className="font-bold text-2xl text-white">{user.fName}</h1> */}
+          <h1 className="font-mono text-accent text-2xl">
+            Hello {user.fName}!
+          </h1>
+        </div>
+
+        {/* MEMBERS */}
         <div className="flex flex-col gap-3">
-          <hr />
-          <Link to="/dashboard/admin" className="font-bold text-xl">
-            Admin Dashboard
+          <Link
+            to="/dashboard"
+            className="font-bold text-xl"
+            onClick={handleCloseSidebar}
+          >
+            Dashboard
           </Link>
-          {adminItems.map((item) => (
+
+          {memberItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
               end={item.end}
+              onClick={handleCloseSidebar}
+              className={({ isActive }) =>
+                `px-3 py-2 rounded-lg transition ${
+                  isActive
+                    ? "border-l-4 border-primary text-primary font-semibold bg-base-200"
+                    : "hover:bg-base-200"
+                }`
+              }
               // className={({ isActive }) =>
               //   `px-3 py-2 rounded-lg transition ${
-              //     isActive ? "bg-base-300 font-semibold" : "hover:bg-base-200"
+              //     isActive
+              //       ? "border-l-4 border-primary text-primary font-semibold"
+              //       : "hover:bg-base-200"
               //   }`
               // }
             >
               {item.name}
             </NavLink>
           ))}
-          {/* <Link to="/dashboard/books">Books</Link>
+
+          {/* <Link to="/dashboard">Dashboard</Link>
+        <Link to="/dashboard/myborrows">My Borrows</Link>
+        <Link to="/dashboard/profile">Profile</Link> */}
+        </div>
+
+        {/* ADMINS */}
+        {["admin", "superadmin"].includes(user?.role) && (
+          <div className="flex flex-col gap-3">
+            <hr />
+            <Link
+              to="/dashboard/admin"
+              className="font-bold text-xl"
+              onClick={handleCloseSidebar}
+            >
+              Admin Dashboard
+            </Link>
+
+            {adminItems.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                end={item.end}
+                onClick={handleCloseSidebar}
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-lg transition ${
+                    isActive
+                      ? "border-l-4 border-primary text-primary font-semibold bg-base-200"
+                      : "hover:bg-base-200"
+                  }`
+                }
+                // className={({ isActive }) =>
+                //   `px-3 py-2 rounded-lg transition ${
+                //     isActive ? "bg-base-300 font-semibold" : "hover:bg-base-200"
+                //   }`
+                // }
+              >
+                {item.name}
+              </NavLink>
+            ))}
+
+            {/* <Link to="/dashboard/books">Books</Link>
         <Link to="/dashboard/borrows">Borrows</Link>
         <Link to="/dashboard/reviews">Review</Link>
         <Link to="/dashboard/members">Members</Link> */}
-        </div>
-      )}
-      {/* SUPER ADMINS */}
-      {user?.role === "superadmin" && (
-        <div className="flex flex-col gap-3">
-          <hr />
-          <p className="font-bold text-xl"> System Admin</p>
-          {superAdminItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              end={item.end}
-              // className={({ isActive }) =>
-              //   `px-3 py-2 rounded-lg transition ${
-              //     isActive ? "bg-base-300 font-semibold" : "hover:bg-base-200"
-              //   }`
-              // }
-            >
-              {item.name}
-            </NavLink>
-          ))}
-          {/* <Link to="/dashboard/admins">Manage Librarians</Link> */}
-        </div>
-      )}
-    </div>
+          </div>
+        )}
+
+        {/* SUPER ADMINS */}
+        {user?.role === "superadmin" && (
+          <div className="flex flex-col gap-3">
+            <hr />
+            <p className="font-bold text-xl"> System Admin</p>
+
+            {superAdminItems.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                end={item.end}
+                onClick={handleCloseSidebar}
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-lg transition ${
+                    isActive
+                      ? "border-l-4 border-primary text-primary font-semibold bg-base-200"
+                      : "hover:bg-base-200"
+                  }`
+                }
+                // className={({ isActive }) =>
+                //   `px-3 py-2 rounded-lg transition ${
+                //     isActive ? "bg-base-300 font-semibold" : "hover:bg-base-200"
+                //   }`
+                // }
+              >
+                {item.name}
+              </NavLink>
+            ))}
+
+            {/* <Link to="/dashboard/admins">Manage Librarians</Link> */}
+          </div>
+        )}
+      </div>
+    </>
   );
 }
