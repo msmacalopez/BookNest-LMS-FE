@@ -6,6 +6,8 @@ import {
   fetchUser,
   fetchNewAccessJWT,
   registerUser,
+  verifyEmailAPI,
+  resendVerificationEmailAPI,
 } from "./authAPI";
 
 // LOGIN
@@ -135,5 +137,28 @@ export const registerUserAction = (form) => async (dispatch) => {
     // toast.error(e?.response?.data?.message || e.message || "Registration failed");
     toast.error("Registration failed");
     return { status: "error", message: e.message };
+  }
+};
+
+export const verifyEmailAction = (token) => async () => {
+  try {
+    return await verifyEmailAPI(token);
+  } catch (e) {
+    return {
+      status: "error",
+      message: e?.response?.data?.message || e.message || "Verification failed",
+    };
+  }
+};
+
+export const resendVerificationEmailAction = (email) => async () => {
+  try {
+    return await resendVerificationEmailAPI(email);
+  } catch (e) {
+    return {
+      status: "error",
+      message:
+        e?.response?.data?.message || e.message || "Failed to resend email",
+    };
   }
 };

@@ -21,6 +21,8 @@ import AllBooksPage from "./pages/public/AllBooksPage.jsx";
 import BookDetailPage from "./pages/public/BookDetailPage.jsx";
 import LoginPage from "./pages/public/LoginPage.jsx";
 import SignupPage from "./pages/public/SignupPage.jsx";
+import CheckEmailPage from "./pages/public/CheckEmailPage.jsx";
+import VerifyEmailPage from "./pages/public/VerifyEmailPage.jsx";
 // private pages:
 import MemberDashboard from "./pages/private-member/MemberDashboard.jsx";
 import MyBorrowsBooksPage from "./pages/private-member/MyBorrowsBooksPage.jsx";
@@ -59,6 +61,8 @@ function App() {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/allbooks" element={<AllBooksPage />} />
             <Route path="/bookdetails" element={<BookDetailPage />} />
+            <Route path="/check-email" element={<CheckEmailPage />} />
+            <Route path="/verify-email" element={<VerifyEmailPage />} />
 
             {/* private routes */}
             <Route path="/dashboard" element={<DashboardLayout />}>

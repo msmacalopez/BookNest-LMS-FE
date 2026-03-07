@@ -18,13 +18,13 @@ export default function SignupPage() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    fName: "test",
-    lName: "test",
-    email: "test@gmail.com",
-    phone: "123",
-    address: "123 rd",
-    password: "123",
-    confirmPassword: "123",
+    fName: "",
+    lName: "",
+    email: "",
+    phone: "",
+    address: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const handleOnChange = (e) => {
@@ -52,8 +52,8 @@ export default function SignupPage() {
     const res = await dispatch(registerUserAction(payload));
 
     if (res?.status === "success") {
-      toast.success("Registration successful!");
-      navigate("/login");
+      toast.success(res?.message || "Registration successful!");
+      navigate("/check-email", { state: { email: payload.email } });
     }
   };
 

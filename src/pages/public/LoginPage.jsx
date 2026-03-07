@@ -16,8 +16,8 @@ export default function LoginPage() {
   const { user } = useSelector((state) => state.authStore);
 
   const [form, setForm] = useState({
-    email: "test@a.com",
-    password: "123",
+    email: "",
+    password: "",
   });
 
   const from = location.state?.from?.pathname || "/dashboard";

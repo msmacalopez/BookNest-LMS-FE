@@ -32,8 +32,8 @@ export const fetchNewAccessJWT = async () => {
     isRefreshToken: true,
   });
   // store new accessJWT in session storage
-  if (tokens?.accessJWT) {
-    sessionStorage.setItem("accessJWT", tokens.accessJWT);
+  if (tokens?.accessToken) {
+    sessionStorage.setItem("accessJWT", tokens.accessToken);
     return true;
   }
   return false;
@@ -45,5 +45,22 @@ export const registerUser = async (data) =>
     method: "post",
     url: "/member/register",
     data,
+    isPrivate: false,
+  });
+
+//nodemailer
+export const verifyEmailAPI = async (token) =>
+  apiProcessor({
+    method: "get",
+    url: `/member/verify-email?token=${token}`,
+    isPrivate: false,
+  });
+
+//nodemailer
+export const resendVerificationEmailAPI = async (email) =>
+  apiProcessor({
+    method: "post",
+    url: "/member/resend-verification",
+    data: { email },
     isPrivate: false,
   });
