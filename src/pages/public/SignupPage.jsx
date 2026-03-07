@@ -53,7 +53,9 @@ export default function SignupPage() {
 
     if (res?.status === "success") {
       toast.success(res?.message || "Registration successful!");
-      navigate("/check-email", { state: { email: payload.email } });
+      //TODO: production: check email instead of login
+      //navigate("/check-email", { state: { email: payload.email } });
+      navigate("/login");
     }
   };
 
