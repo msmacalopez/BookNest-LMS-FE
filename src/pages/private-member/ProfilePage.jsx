@@ -267,6 +267,8 @@ export default function ProfilePage() {
                         ? "badge-warning"
                         : safeUser.status === "deactivated"
                         ? "badge-error"
+                        : safeUser.status === "pending"
+                        ? "badge-info"
                         : "badge-ghost"
                     }`}
                   >

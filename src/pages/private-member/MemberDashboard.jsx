@@ -128,15 +128,17 @@ const MemberDashboard = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case "active":
-        return "#22c55e";
+        return "#22c55e"; // green
       case "inactive":
-        return "#6b7280";
+        return "#6b7280"; // gray
       case "suspended":
-        return "#f59e0b";
+        return "#f59e0b"; // amber
       case "deactivated":
-        return "#ef4444";
+        return "#ef4444"; // red
+      case "pending":
+        return "#8b5cf6"; // violet
       default:
-        return "#3b82f6";
+        return "#3b82f6"; // blue
     }
   };
 

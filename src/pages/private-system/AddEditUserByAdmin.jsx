@@ -31,6 +31,8 @@ const statusBadgeClass = (status) => {
       return "badge-warning";
     case "deactivated":
       return "badge-error";
+    case "pending":
+      return "badge-info";
     default:
       return "badge-ghost";
   }
@@ -225,6 +227,7 @@ export default function AddEditUserByAdmin() {
                 <option value="inactive">Inactive</option>
                 <option value="suspended">Suspended</option>
                 <option value="deactivated">Deactivated</option>
+                <option value="pending">Pending</option>
               </select>
             </label>
 

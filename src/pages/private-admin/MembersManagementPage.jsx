@@ -90,7 +90,9 @@ export default function MembersManagementPage() {
         ? "badge-error"
         : value === "suspended"
         ? "badge-warning"
-        : "badge-ghost"; // deactivated etc
+        : value === "pending"
+        ? "badge-neutral"
+        : "badge-ghost";
 
     return <span className={`badge ${cls}`}>{value}</span>;
   };
@@ -151,6 +153,7 @@ export default function MembersManagementPage() {
             <option value="inactive">Inactive</option>
             <option value="suspended">Suspended</option>
             <option value="deactivated">Deactivated</option>
+            <option value="pending">Pending</option>
           </select>
 
           <button
@@ -218,6 +221,7 @@ export default function MembersManagementPage() {
                           <option value="inactive">inactive</option>
                           <option value="suspended">suspended</option>
                           <option value="deactivated">deactivated</option>
+                          <option value="pending">pending</option>
                         </select>
 
                         <button

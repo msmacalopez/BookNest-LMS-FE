@@ -101,6 +101,7 @@ const AdminDashboard = () => {
     { value: "inactive", label: "Inactive" },
     { value: "suspended", label: "Suspended" },
     { value: "deactivated", label: "Deactivated" },
+    { value: "pending", label: "Pending" },
   ];
 
   const [chartsRange, setChartsRange] = useState("14");

@@ -289,6 +289,7 @@ export default function ManageAdmins() {
               <option value="inactive">Inactive</option>
               <option value="suspended">Suspended</option>
               <option value="deactivated">Deactivated</option>
+              <option value="pending">Pending</option>
             </select>
 
             {/* Search button */}
