@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { autoLoginUserAction } from "./features/auth/authAction.js";
+import ProtectedRendering from "./components/ProtectedRendering.jsx";
 
 // Toastify:
 import "react-toastify/dist/ReactToastify.css";
@@ -46,7 +47,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(autoLoginUserAction);
+    dispatch(autoLoginUserAction());
   }, [dispatch]);
 
   return (
@@ -65,32 +66,65 @@ function App() {
             <Route path="/verify-email" element={<VerifyEmailPage />} />
 
             {/* private routes */}
-            <Route path="/dashboard" element={<DashboardLayout />}>
-              {/* Logged In Members */}
-              <Route index element={<MemberDashboard />} />
-              <Route path="myborrows" element={<MyBorrowsBooksPage />} />
-              <Route path="profile" element={<ProfilePage />} />
-              <Route path="myreviews" element={<MyReviews />} />
-              <Route path="myholds" element={<MyHolds />} />
+            {/* all logged-in users */}
+            <Route element={<ProtectedRendering />}>
+              <Route path="/dashboard" element={<DashboardLayout />}>
+                {/* member routes */}
+                <Route
+                  element={
+                    <ProtectedRendering
+                      allowedRoles={["member", "admin", "superadmin"]}
+                      requireActive={true}
+                    />
+                  }
+                >
+                  <Route index element={<MemberDashboard />} />
+                  <Route path="myborrows" element={<MyBorrowsBooksPage />} />
+                  <Route path="profile" element={<ProfilePage />} />
+                  <Route path="myreviews" element={<MyReviews />} />
+                  <Route path="myholds" element={<MyHolds />} />
+                </Route>
 
-              {/* Admins */}
-              <Route path="admin" element={<AdminDashboard />} />
-              <Route path="books" element={<BookManagementPage />} />
-              <Route path="holds" element={<HoldsManagement />} />
-              <Route path="borrows" element={<BorrowManagementPage />} />
-              <Route path="reviews" element={<ReviewManagementPage />} />
-              <Route path="members" element={<MembersManagementPage />} />
-              <Route path="books/new" element={<AddEditBookPage />} />
-              <Route path="books/:id/edit" element={<AddEditBookPage />} />
-              <Route
-                path="borrows/resultborrows"
-                element={<BorrowsResultOfSearch />}
-              />
-              {/* Super Admins */}
+                {/* admin routes */}
+                <Route
+                  element={
+                    <ProtectedRendering
+                      allowedRoles={["admin", "superadmin"]}
+                      requireActive={true}
+                    />
+                  }
+                >
+                  <Route path="admin" element={<AdminDashboard />} />
+                  <Route path="books" element={<BookManagementPage />} />
+                  <Route path="holds" element={<HoldsManagement />} />
+                  <Route path="borrows" element={<BorrowManagementPage />} />
+                  <Route path="reviews" element={<ReviewManagementPage />} />
+                  <Route path="members" element={<MembersManagementPage />} />
+                  <Route path="books/new" element={<AddEditBookPage />} />
+                  <Route path="books/:id/edit" element={<AddEditBookPage />} />
+                  <Route
+                    path="borrows/resultborrows"
+                    element={<BorrowsResultOfSearch />}
+                  />
+                </Route>
 
-              <Route path="admins" element={<ManageAdmins />} />
-              <Route path="users/new" element={<AddEditUserByAdmin />} />
-              <Route path="users/:id/edit" element={<AddEditUserByAdmin />} />
+                {/* superadmin routes */}
+                <Route
+                  element={
+                    <ProtectedRendering
+                      allowedRoles={["superadmin"]}
+                      requireActive={true}
+                    />
+                  }
+                >
+                  <Route path="admins" element={<ManageAdmins />} />
+                  <Route path="users/new" element={<AddEditUserByAdmin />} />
+                  <Route
+                    path="users/:id/edit"
+                    element={<AddEditUserByAdmin />}
+                  />
+                </Route>
+              </Route>
             </Route>
           </Routes>
         </main>

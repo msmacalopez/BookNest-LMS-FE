@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosMail } from "react-icons/io";
 import { FaLock } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -20,11 +20,16 @@ export default function LoginPage() {
     password: "",
   });
 
-  const from = location.state?.from?.pathname || "/dashboard";
+  const from = location.state?.from?.pathname;
 
   useEffect(() => {
     if (user?._id) {
-      navigate(from, { replace: true });
+      const defaultPath =
+        user.role === "admin" || user.role === "superadmin"
+          ? "/dashboard/admin"
+          : "/dashboard";
+
+      navigate(from || defaultPath, { replace: true });
     } else {
       dispatch(autoLoginUserAction());
     }

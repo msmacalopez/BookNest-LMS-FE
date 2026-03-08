@@ -35,7 +35,7 @@ export default function SideBar() {
   return (
     <>
       {/* mobile toggle button */}
-      <div className="md:hidden mb-4">
+      <div className="md:hidden mb-3">
         <button
           type="button"
           className="btn btn-outline btn-sm"
@@ -45,20 +45,18 @@ export default function SideBar() {
         </button>
       </div>
 
-      <div className={`${isOpen ? "flex" : "hidden"} md:flex flex-col gap-5`}>
+      <div className={`${isOpen ? "flex" : "hidden"} md:flex flex-col gap-3`}>
         {/* title */}
         <div>
           {/* <h1 className="font-bold text-2xl text-white">{user.fName}</h1> */}
-          <h1 className="font-mono text-accent text-2xl">
-            Hello {user.fName}!
-          </h1>
+          <h1 className="font-mono text-accent text-xl">Hello {user.fName}!</h1>
         </div>
 
         {/* MEMBERS */}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           <Link
             to="/dashboard"
-            className="font-bold text-xl"
+            className="font-bold text-lg"
             onClick={handleCloseSidebar}
           >
             Dashboard
@@ -71,7 +69,7 @@ export default function SideBar() {
               end={item.end}
               onClick={handleCloseSidebar}
               className={({ isActive }) =>
-                `px-3 py-2 rounded-lg transition ${
+                `px-2 py-1.5 rounded-lg transition ${
                   isActive
                     ? "border-l-4 border-primary text-primary font-semibold bg-base-200"
                     : "hover:bg-base-200"
@@ -88,19 +86,15 @@ export default function SideBar() {
               {item.name}
             </NavLink>
           ))}
-
-          {/* <Link to="/dashboard">Dashboard</Link>
-        <Link to="/dashboard/myborrows">My Borrows</Link>
-        <Link to="/dashboard/profile">Profile</Link> */}
         </div>
 
         {/* ADMINS */}
         {["admin", "superadmin"].includes(user?.role) && (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             <hr />
             <Link
               to="/dashboard/admin"
-              className="font-bold text-xl"
+              className="font-bold text-lg"
               onClick={handleCloseSidebar}
             >
               Admin Dashboard
@@ -113,7 +107,7 @@ export default function SideBar() {
                 end={item.end}
                 onClick={handleCloseSidebar}
                 className={({ isActive }) =>
-                  `px-3 py-2 rounded-lg transition ${
+                  `px-2 py-1.5 rounded-lg transition ${
                     isActive
                       ? "border-l-4 border-primary text-primary font-semibold bg-base-200"
                       : "hover:bg-base-200"
@@ -128,19 +122,14 @@ export default function SideBar() {
                 {item.name}
               </NavLink>
             ))}
-
-            {/* <Link to="/dashboard/books">Books</Link>
-        <Link to="/dashboard/borrows">Borrows</Link>
-        <Link to="/dashboard/reviews">Review</Link>
-        <Link to="/dashboard/members">Members</Link> */}
           </div>
         )}
 
         {/* SUPER ADMINS */}
         {user?.role === "superadmin" && (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             <hr />
-            <p className="font-bold text-xl"> System Admin</p>
+            <p className="font-bold text-lg"> System Admin</p>
 
             {superAdminItems.map((item) => (
               <NavLink
@@ -149,7 +138,7 @@ export default function SideBar() {
                 end={item.end}
                 onClick={handleCloseSidebar}
                 className={({ isActive }) =>
-                  `px-3 py-2 rounded-lg transition ${
+                  `px-2 py-1.5 rounded-lg transition ${
                     isActive
                       ? "border-l-4 border-primary text-primary font-semibold bg-base-200"
                       : "hover:bg-base-200"
@@ -164,8 +153,6 @@ export default function SideBar() {
                 {item.name}
               </NavLink>
             ))}
-
-            {/* <Link to="/dashboard/admins">Manage Librarians</Link> */}
           </div>
         )}
       </div>
