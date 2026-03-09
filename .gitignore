@@ -30,3 +30,5 @@ node_modules
 .env.*
 dist
 build
+src/pages/private-admin/BorrowsResultOfSearch.jsx
+workflow.md
