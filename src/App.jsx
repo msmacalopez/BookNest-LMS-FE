@@ -38,7 +38,7 @@ import BorrowManagementPage from "./pages/private-admin/BorrowManagementPage.jsx
 import ReviewManagementPage from "./pages/private-admin/ReviewManagementPage.jsx";
 import AddEditBookPage from "./pages/private-admin/AddEditBookPage.jsx";
 import MembersManagementPage from "./pages/private-admin/MembersManagementPage.jsx";
-import BorrowsResultOfSearch from "./pages/private-admin/BorrowsResultOfSearch.jsx";
+// import BorrowsResultOfSearch from "./pages/private-admin/BorrowsResultOfSearch.jsx";
 //Super Admin pages:
 import ManageAdmins from "./pages/private-system/ManageAdmins.jsx";
 import AddEditUserByAdmin from "./pages/private-system/AddEditUserByAdmin.jsx";
@@ -102,10 +102,10 @@ function App() {
                   <Route path="members" element={<MembersManagementPage />} />
                   <Route path="books/new" element={<AddEditBookPage />} />
                   <Route path="books/:id/edit" element={<AddEditBookPage />} />
-                  <Route
+                  {/* <Route
                     path="borrows/resultborrows"
                     element={<BorrowsResultOfSearch />}
-                  />
+                  /> */}
                 </Route>
 
                 {/* superadmin routes */}
