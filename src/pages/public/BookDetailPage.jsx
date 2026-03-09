@@ -264,7 +264,7 @@ export default function BookDetailPage() {
           <img
             src={imageSrc}
             alt={book.title}
-            className="max-h-150 md:max-h-none min-w-100 rounded-2xl"
+            className="w-full max-w-[420px] max-h-[600px] object-contain rounded-2xl"
           />
         </figure>
 
